@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Build artifacts
+build/
+dist/
+*.dmg
+*.app
+test_strip
+
+# Secrets and local configurations
+*.json
+*telegram*
+TELEGRAM_INSTRUCTIONS.md
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
