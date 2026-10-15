@@ -9,7 +9,7 @@
 
 - **Application Name**: SDOCX Converter (formerly Lite; all "Lite" branding has been completely removed)
 - **Target OS**: macOS 12.0+ (Universal / Apple Silicon & Intel)
-- **Local Workspace**: `~/Projects/sdocx-converter-lite`
+- **Local Workspace**: `~/Projects/sdocx-converter-macos`
 - **GitHub Repository**: [FizzyHedgehog/sdocx-converter-macos](https://github.com/FizzyHedgehog/sdocx-converter-macos)
 - **Default Branch**: `main`
 - **Release Status**: `v1.0.0` (Asset: `SDOCX_Converter.dmg`, 5.70 MB)
