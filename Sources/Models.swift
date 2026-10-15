@@ -189,6 +189,10 @@ final class AppSettings: ObservableObject {
         didSet { defaults.set(includePrereleaseUpdates, forKey: "ui.includePrereleaseUpdates") }
     }
 
+    @Published var isDeveloperMode: Bool {
+        didSet { defaults.set(isDeveloperMode, forKey: "ui.isDeveloperMode") }
+    }
+
     @Published var showLicenseSheet: Bool = false
 
     init() {
@@ -225,6 +229,40 @@ final class AppSettings: ObservableObject {
         self.autoConvertOnOpenWith = defaults.object(forKey: "ui.autoConvertOnOpenWith") as? Bool ?? true
         self.automaticallyCheckForUpdates = defaults.object(forKey: "ui.automaticallyCheckForUpdates") as? Bool ?? true
         self.includePrereleaseUpdates = defaults.bool(forKey: "ui.includePrereleaseUpdates")
+        self.isDeveloperMode = defaults.bool(forKey: "ui.isDeveloperMode")
+    }
+
+    @Published var devToastMessage: String = ""
+    private var versionTapCount: Int = 0
+    private var lastTapTime: Date = .distantPast
+
+    func handleVersionTap() {
+        let now = Date()
+        if now.timeIntervalSince(lastTapTime) > 2.0 {
+            versionTapCount = 0
+        }
+        lastTapTime = now
+        versionTapCount += 1
+
+        if isDeveloperMode {
+            return
+        }
+
+        let remaining = 7 - versionTapCount
+        if remaining > 0 && remaining <= 3 {
+            devToastMessage = String(format: tr("dev_mode_tap_count"), remaining)
+        } else if remaining <= 0 {
+            isDeveloperMode = true
+            versionTapCount = 0
+            devToastMessage = tr("dev_mode_enabled")
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) { [weak self] in
+            guard let self = self else { return }
+            if self.devToastMessage == self.tr("dev_mode_enabled") || self.devToastMessage.contains("\(remaining)") {
+                self.devToastMessage = ""
+            }
+        }
     }
 
     func tr(_ key: String) -> String {
@@ -329,7 +367,12 @@ struct Strings {
             "opt_include_prereleases_desc": "GitHub에 사전 공개된 테스트 버전을 먼저 확인하고 설치할 수 있습니다 (일반 사용자에게는 비공개).",
             "update_test_simulation_title": "개발자 모드: 업데이트 전체 흐름 테스트",
             "update_test_simulation_btn": "시뮬레이션 실행",
-            "update_test_simulation_desc": "현재 버전을 v0.9.0으로 가정하여 실제 v1.0.0 업데이트 다운로드 및 설치 과정을 즉시 검증합니다."
+            "update_test_simulation_desc": "현재 버전을 v0.9.0으로 가정하여 실제 v1.0.0 업데이트 다운로드 및 설치 과정을 즉시 검증합니다.",
+            "dev_mode_title": "개발자 옵션 (Developer Options)",
+            "dev_mode_tap_count": "개발자 모드 활성화까지 %d번 남았습니다.",
+            "dev_mode_enabled": "개발자 모드가 활성화되었습니다!",
+            "dev_mode_disabled": "개발자 모드가 비활성화되었습니다.",
+            "dev_mode_hide_btn": "개발자 모드 끄기 (다시 숨기기)"
         ],
         .en: [
             "app_title": "SDOCX → PDF Converter",
@@ -425,7 +468,12 @@ struct Strings {
             "opt_include_prereleases_desc": "Check and install test releases before official release (hidden from regular users).",
             "update_test_simulation_title": "Developer Mode: Test Update Simulation",
             "update_test_simulation_btn": "Run Simulation",
-            "update_test_simulation_desc": "Simulates local version as v0.9.0 to test the entire update and install flow immediately."
+            "update_test_simulation_desc": "Simulates local version as v0.9.0 to test the entire update and install flow immediately.",
+            "dev_mode_title": "Developer Options",
+            "dev_mode_tap_count": "You are %d steps away from being a developer.",
+            "dev_mode_enabled": "Developer mode enabled!",
+            "dev_mode_disabled": "Developer mode disabled.",
+            "dev_mode_hide_btn": "Disable Developer Mode (Hide)"
         ]
 
     ]

@@ -632,8 +632,30 @@ struct PreferencesView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
                         VStack(alignment: .leading, spacing: 3) {
-                            Text(String(format: settings.tr("update_current_ver"), updateManager.currentVersion))
-                                .font(.system(size: 12, weight: .semibold))
+                            HStack(spacing: 6) {
+                                Text(String(format: settings.tr("update_current_ver"), updateManager.currentVersion))
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .contentShape(Rectangle())
+                                    .onTapGesture {
+                                        settings.handleVersionTap()
+                                    }
+
+                                if settings.isDeveloperMode {
+                                    Text("DEV")
+                                        .font(.system(size: 9, weight: .bold))
+                                        .padding(.horizontal, 4)
+                                        .padding(.vertical, 1)
+                                        .background(Color.orange.opacity(0.15))
+                                        .foregroundColor(.orange)
+                                        .cornerRadius(4)
+                                }
+                            }
+
+                            if !settings.devToastMessage.isEmpty {
+                                Text(settings.devToastMessage)
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundColor(.orange)
+                            }
 
                             if updateManager.hasUpdate {
                                 Text(String(format: settings.tr("update_available_notice"), updateManager.latestVersion))
@@ -718,34 +740,67 @@ struct PreferencesView: View {
                         .font(.system(size: 11))
                         .foregroundColor(.secondary)
                         .padding(.leading, 20)
-
-                    Toggle(settings.tr("opt_include_prereleases"), isOn: $settings.includePrereleaseUpdates)
-                        .toggleStyle(.checkbox)
-                    Text(settings.tr("opt_include_prereleases_desc"))
-                        .font(.system(size: 11))
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 20)
-
-                    Divider()
-
-                    HStack {
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text(settings.tr("update_test_simulation_title"))
-                                .font(.system(size: 12, weight: .medium))
-                            Text(settings.tr("update_test_simulation_desc"))
-                                .font(.system(size: 11))
-                                .foregroundColor(.secondary)
-                        }
-                        Spacer()
-                        Button(settings.tr("update_test_simulation_btn")) {
-                            updateManager.checkForUpdates(silent: false, includePrereleases: settings.includePrereleaseUpdates, simulateTest: true)
-                        }
-                        .buttonStyle(.bordered)
-                        .controlSize(.small)
-                        .disabled(updateManager.isChecking || updateManager.isDownloading)
-                    }
                 }
                 .padding(8)
+            }
+
+            // 개발자 옵션 (버전 7회 탭 시 활성화)
+            if settings.isDeveloperMode {
+                GroupBox(label: HStack(spacing: 6) {
+                    Image(systemName: "hammer.fill")
+                        .foregroundColor(.orange)
+                    Text(settings.tr("dev_mode_title"))
+                        .font(.headline)
+                        .foregroundColor(.orange)
+                }) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Toggle(settings.tr("opt_include_prereleases"), isOn: $settings.includePrereleaseUpdates)
+                            .toggleStyle(.checkbox)
+                        Text(settings.tr("opt_include_prereleases_desc"))
+                            .font(.system(size: 11))
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 20)
+
+                        Divider()
+
+                        HStack {
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(settings.tr("update_test_simulation_title"))
+                                    .font(.system(size: 12, weight: .medium))
+                                Text(settings.tr("update_test_simulation_desc"))
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            Button(settings.tr("update_test_simulation_btn")) {
+                                updateManager.checkForUpdates(silent: false, includePrereleases: settings.includePrereleaseUpdates, simulateTest: true)
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.small)
+                            .disabled(updateManager.isChecking || updateManager.isDownloading)
+                        }
+
+                        Divider()
+
+                        HStack {
+                            Spacer()
+                            Button(settings.tr("dev_mode_hide_btn")) {
+                                withAnimation {
+                                    settings.isDeveloperMode = false
+                                    settings.includePrereleaseUpdates = false
+                                    settings.devToastMessage = settings.tr("dev_mode_disabled")
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                    settings.devToastMessage = ""
+                                }
+                            }
+                            .buttonStyle(.plain)
+                            .font(.system(size: 11))
+                            .foregroundColor(.secondary)
+                        }
+                    }
+                    .padding(8)
+                }
             }
 
             // 오픈소스 라이선스 및 크레딧
