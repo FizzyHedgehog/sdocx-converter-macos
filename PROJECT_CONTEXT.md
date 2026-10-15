@@ -22,19 +22,15 @@
 ## 2. Strict User Rules & Guidelines
 
 1. **NO Local MacBook Downloads**:
-   - **NEVER** save or copy generated `.dmg` (or `.apk`) files to the MacBook's `~/Desktop` or personal user storage.
-   - Built `.dmg` files reside only inside `dist/SDOCX_Converter.dmg` and must be sent directly to Telegram.
-2. **Direct Telegram Delivery & Full/Summary Reporting**:
-   - Build artifacts must be delivered directly to the user's Telegram chat/topic using `notify_telegram.send_telegram_document`.
-   - Detailed task reports must always include both full content and a 3-line core summary via `notify_telegram.send_full_and_summary`.
-3. **Hidden Feature Branch & Release Isolation**:
+   - **NEVER** save, copy, or download generated `.dmg` (or `.apk`) files to the MacBook's `~/Desktop` or personal user storage.
+   - Built `.dmg` files must be delivered directly to Telegram using `notify_telegram.py` and kept strictly within `dist/` (never exported to Desktop).
+2. **Hidden Feature Branch & Release Isolation**:
    - When developing or testing new features, work strictly on isolated feature branches (e.g. `feature/...`).
-   - Do NOT overwrite public Release v1.0.0 or `main` until the user explicitly tests and approves ("정식 배포해" / "올려줘").
-4. **English Code & Commits**:
+   - Do NOT overwrite public Release `v1.0.0` or `main` branch until the user explicitly tests and approves ("정식 배포해" / "올려줘").
+3. **English Code & Commits**:
    - All code comments, Git commit messages, and documentation must be written in clear English without emojis.
-5. **Preserve User Privacy & Terminal Silence**:
+4. **Preserve User Privacy**:
    - Keep GitHub profile anonymous (`FizzyHedgehog`).
-   - Terminal silence principle: never use audible commands (`afplay`, `say`).
 
 ---
 
@@ -67,15 +63,17 @@
 
 ## 5. Telegram Integration & Listener Rules
 
-- Telegram config: `~/.config/sdocx_telegram_config.json`
-- Notification utility: `python3 ~/.sdocx_telegram_agent/notify_telegram.py`
+- **Telegram Configuration**: `~/.config/sdocx_telegram_config.json`
+- **Notification Utility**: `python3 ~/.sdocx_telegram_agent/notify_telegram.py`
+  - Long responses are split safely within 3,800 characters.
+  - Can deliver messages, full/summary content, and binary artifacts (`.dmg`) directly to Telegram.
+  - Automatically routes to the macOS group when specifying `platform="macos"`.
+  - Supports Telegram native reply format via `reply_to_message_id`.
 - **Telegram Incoming Command Listener**:
   - Script: `python3 ~/.sdocx_telegram_agent/wait_for_telegram_macos.py`
   - Group: `sdocx-converter-macos` (Chat ID: `-100XXXXXXXXXX`)
   - **OPERATIONAL RULE**:
-    Whenever the user says **"텔레그램 대기"**, **"텔레그램 기다려"**, **"대기해"**, or asks to wait for Telegram messages:
+    Whenever the user says **"텔레그램 대기"**, **"텔레그램 기다려"**, **"대기해"**, **"텔레그램 리스너 켜줘"**, or asks to wait for Telegram messages:
     You **MUST execute the listener as a background task**:
     `run_command(CommandLine="python3 ~/.sdocx_telegram_agent/wait_for_telegram_macos.py", Cwd="~/Projects/sdocx-converter-macos", WaitMsBeforeAsync=1000)`
     Do NOT simply reply "대기하겠습니다" with plain text. Always launch the background listener so you wake up reactively when a command arrives from the macOS Telegram group!
-  - Always respond to Telegram messages using `notify_telegram.send_full_and_summary(full_content, summary_content, platform="macos", reply_to_message_id=...)` to provide both full details and a concise 3-line summary.
-
