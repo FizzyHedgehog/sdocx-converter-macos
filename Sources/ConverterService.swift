@@ -136,7 +136,7 @@ final class QuickActionManager {
     }
 
     func installIfNeeded() {
-        guard let bundledURL = Bundle.main.url(forResource: "SDOCX를 PDF로 변환", withExtension: "workflow") else {
+        guard let bundledURL = Bundle.main.url(forResource: "Convert_SDOCX_to_PDF", withExtension: "workflow") else {
             return
         }
 
@@ -151,7 +151,7 @@ final class QuickActionManager {
     }
 
     func forceReinstall() -> Bool {
-        guard let bundledURL = Bundle.main.url(forResource: "SDOCX를 PDF로 변환", withExtension: "workflow") else {
+        guard let bundledURL = Bundle.main.url(forResource: "Convert_SDOCX_to_PDF", withExtension: "workflow") else {
             return false
         }
         let fm = FileManager.default

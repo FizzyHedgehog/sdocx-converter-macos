@@ -13,10 +13,11 @@ DESKTOP_DMG="$HOME/Desktop/${DMG_NAME}.dmg"
 echo "==> 1. 최신 앱 빌드 확인 및 빌드 실행"
 ./build_native.sh
 
-echo "==> 2. 메타데이터 및 확장 속성 정제"
+echo "==> 2. 메타데이터 및 확장 속성 정제 후 정밀 서명"
 xattr -cr "$OUTPUT_DIR/$APP_NAME.app"
 xattr -cr "LICENSE.txt"
-/usr/bin/SetFile -a E "$OUTPUT_DIR/$APP_NAME.app"
+codesign --force --deep --sign - --identifier "com.fizzyhedgehog.sdocx-converter" "$OUTPUT_DIR/$APP_NAME.app"
+codesign --verify --deep --strict "$OUTPUT_DIR/$APP_NAME.app"
 
 echo "==> 3. HiDPI 배경 TIFF 생성 확인"
 /usr/bin/tiffutil -cathidpicheck assets/dmg_background_en.png assets/dmg_background_en@2x.png -out assets/dmg_background_en.tiff
@@ -24,6 +25,9 @@ echo "==> 3. HiDPI 배경 TIFF 생성 확인"
 echo "==> 4. dmgbuild를 통한 크롬 스타일 고화질 대칭 DMG 생성"
 rm -f "$FINAL_DMG" "$DESKTOP_DMG"
 python3 -m dmgbuild -s dmg_settings.py "$APP_NAME" "$FINAL_DMG"
+
+echo "==> 5. 생성된 DMG 자체 코드 서명"
+codesign --force --sign - "$FINAL_DMG"
 
 # 바탕화면 복사
 cp "$FINAL_DMG" "$DESKTOP_DMG"

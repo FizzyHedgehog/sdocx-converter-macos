@@ -150,21 +150,11 @@ cat <<EOF > "$APP_BUNDLE/Contents/Info.plist"
 EOF
 
 echo "==> 5. Ad-hoc 코드 서명 (개인 실명 비노출 -s -)"
+xattr -cr "$APP_BUNDLE"
 codesign --force --deep --sign - --identifier "$BUNDLE_ID" "$APP_BUNDLE"
 codesign --verify --deep --strict "$APP_BUNDLE"
 
 rm -rf build
-
-echo "==> 6. /Applications 에 최신 앱 동기화 설치"
-pkill -f "SDOCX Converter Lite" 2>/dev/null || true
-rm -rf "/Applications/$APP_NAME.app"
-cp -R "$APP_BUNDLE" "/Applications/$APP_NAME.app"
-touch "/Applications/$APP_NAME.app"
-/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f -r "/Applications/$APP_NAME.app" 2>/dev/null || true
-qlmanage -r cache 2>/dev/null || true
-qlmanage -r 2>/dev/null || true
-killall Dock 2>/dev/null || true
-killall Finder 2>/dev/null || true
 
 echo "==========================================="
 echo "빌드 및 설치 완료:"

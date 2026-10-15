@@ -45,6 +45,29 @@
 2. Open the disk image.
 3. Drag **SDOCX Converter Lite** to your **Applications** folder.
 
+> [!NOTE]
+> **First-time Launch on macOS (Gatekeeper)**  
+> Because SDOCX Converter Lite is a free, independent open-source project without a paid Apple Developer certificate ($99/year), macOS Gatekeeper may show a standard verification dialog on first launch.
+> 
+> **How to open (one-time only):**
+> - **Option 1 (Recommended)**: In Finder (`/Applications`), **Right-click (or Control + Click)** on `SDOCX Converter Lite` ➔ select **Open** ➔ click **Open** in the prompt.
+> - **Option 2**: Go to **System Settings** ➔ **Privacy & Security**, scroll down to the Security section, and click **Open Anyway**.
+> - **Option 3 (Terminal)**: Run `xattr -cr "/Applications/SDOCX Converter Lite.app"`
+
+<details>
+<summary><strong>🇰🇷 한국어 안내 (최초 1회 실행 시 '확인되지 않은 개발자' 팝업 해결법)</strong></summary>
+<br/>
+
+본 앱은 무료 오픈소스 프로젝트로 유료 Apple 개발자 계정 인증서가 등록되어 있지 않아, 다운로드 후 최초 1회 실행 시 macOS Gatekeeper 안내창이 나타날 수 있습니다. (컴퓨터 바이러스나 손상이 아닙니다.)
+
+**간단 실행 방법 (최초 1회만 필요):**
+1. **가장 간편한 방법 (추천)**: Finder의 `응용 프로그램(/Applications)` 폴더에서 앱 아이콘을 **우클릭(또는 Control + 클릭)** ➔ **[열기]** 선택 ➔ 팝업창에서 **[열기]** 클릭
+2. **시스템 설정에서 허용**: **시스템 설정** ➔ **개인정보 보호 및 보안** ➔ 화면 아래 보안 섹션에서 **[확인 없이 열기]** 클릭
+3. **터미널 명령어 한 줄**: 터미널에서 `xattr -cr "/Applications/SDOCX Converter Lite.app"` 실행
+
+한 번 허용해 두시면 이후부터는 일반 앱과 똑같이 더블클릭으로 바로 열립니다.
+</details>
+
 ---
 
 ## 🛠 Building from Source
