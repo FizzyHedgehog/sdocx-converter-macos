@@ -208,13 +208,35 @@ final class UpdateManager: NSObject, ObservableObject, URLSessionDownloadDelegat
             try FileManager.default.copyItem(at: location, to: tempDMG)
 
             Task { @MainActor in
-                self.applyUpdate(dmgURL: tempDMG)
+                self.promptAndApplyUpdate(dmgURL: tempDMG)
             }
         } catch {
             Task { @MainActor in
                 self.isDownloading = false
                 self.errorMessage = "Failed to prepare update: \(error.localizedDescription)"
             }
+        }
+    }
+
+    private func promptAndApplyUpdate(dmgURL: URL) {
+        let lang = UserDefaults.standard.string(forKey: "language") ?? "ko"
+        let isKorean = lang == "ko"
+        let alert = NSAlert()
+        alert.messageText = isKorean ? "업데이트 설치 준비 완료" : "Update Ready to Install"
+        alert.informativeText = isKorean ?
+            "새 버전 다운로드가 완료되었습니다.\n지금 앱을 종료하고 다시 실행하여 업데이트를 완료하시겠습니까?" :
+            "The new version has been downloaded.\nWould you like to restart the application now to complete the update?"
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: isKorean ? "지금 재시작" : "Restart Now")
+        alert.addButton(withTitle: isKorean ? "나중에" : "Later")
+
+        NSApplication.shared.activate(ignoringOtherApps: true)
+        let response = alert.runModal()
+        if response == .alertFirstButtonReturn {
+            applyUpdate(dmgURL: dmgURL)
+        } else {
+            isDownloading = false
+            isUpdating = false
         }
     }
 
@@ -243,6 +265,7 @@ final class UpdateManager: NSObject, ObservableObject, URLSessionDownloadDelegat
             fi
             sleep 0.25
         done
+        kill -9 "$APP_PID" 2>/dev/null || true
 
         # Create temporary mount point
         MOUNT_DIR=$(mktemp -d /tmp/sdocx_update_mount_XXXXXX)
@@ -280,7 +303,8 @@ final class UpdateManager: NSObject, ObservableObject, URLSessionDownloadDelegat
             updateProcess.arguments = [scriptPath]
             try updateProcess.run()
 
-            NSApplication.shared.terminate(nil)
+            // Force exit immediately so the process terminates and the updater can replace & relaunch it
+            exit(0)
         } catch {
             isUpdating = false
             isDownloading = false

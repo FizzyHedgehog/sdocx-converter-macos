@@ -256,6 +256,7 @@ final class AppSettings: ObservableObject {
             promptDeveloperPassword { [weak self] in
                 guard let self = self else { return }
                 self.isDeveloperMode = true
+                self.includePrereleaseUpdates = true
                 self.devToastMessage = self.tr("dev_mode_enabled")
             }
         }
