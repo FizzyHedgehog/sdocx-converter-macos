@@ -47,25 +47,48 @@
 
 > [!NOTE]
 > **First-time Launch on macOS (Gatekeeper)**  
-> Because SDOCX Converter Lite is a free, independent open-source project without a paid Apple Developer certificate ($99/year), macOS Gatekeeper may show a standard verification dialog on first launch.
+> Because SDOCX Converter Lite is a free, independent open-source project without a paid Apple Developer certificate ($99/year), macOS (especially **macOS Sequoia 15+**) requires confirming **"Open Anyway" twice** on first launch: once when opening the DMG, and once when opening the installed app.
 > 
-> **How to open (one-time only):**
-> - **Option 1 (Recommended)**: In Finder (`/Applications`), **Right-click (or Control + Click)** on `SDOCX Converter Lite` ➔ select **Open** ➔ click **Open** in the prompt.
-> - **Option 2**: Go to **System Settings** ➔ **Privacy & Security**, scroll down to the Security section, and click **Open Anyway**.
-> - **Option 3 (Terminal)**: Run `xattr -cr "/Applications/SDOCX Converter Lite.app"`
+> **Standard GUI Method (System Settings — 2 Steps):**
+> 1. **Step 1 (Open DMG)**: Double-click `SDOCX_Converter_Lite.dmg`. When blocked, click **Done**. Go to **System Settings** ➔ **Privacy & Security**, scroll down to Security, and click **Open Anyway** next to the DMG warning ➔ enter your password. Drag the app to `/Applications`.
+> 2. **Step 2 (Open App)**: Open `/Applications` and double-click `SDOCX Converter Lite`. When blocked, click **Done**. Go to **System Settings** ➔ **Privacy & Security** again, click **Open Anyway** next to the app warning ➔ enter your password. (Only needed once; subsequent launches open immediately!).
+> 
+> **Fast Terminal Shortcuts (Bypasses both prompts in 1 second!):**
+> - **Before opening the DMG (Recommended)**: Run this in Terminal to remove the browser quarantine flag from the DMG file directly:
+>   ```bash
+>   xattr -cr ~/Downloads/SDOCX_Converter_Lite.dmg
+>   ```
+> - **Or after moving the app to `/Applications`**:
+>   ```bash
+>   xattr -cr "/Applications/SDOCX Converter Lite.app"
+>   ```
 
 <details>
-<summary><strong>🇰🇷 한국어 안내 (최초 1회 실행 시 '확인되지 않은 개발자' 팝업 해결법)</strong></summary>
+<summary><strong>🇰🇷 한국어 안내 (macOS Sequoia 15+ 최초 실행 시 2단계 승인 해결법)</strong></summary>
 <br/>
 
-본 앱은 무료 오픈소스 프로젝트로 유료 Apple 개발자 계정 인증서가 등록되어 있지 않아, 다운로드 후 최초 1회 실행 시 macOS Gatekeeper 안내창이 나타날 수 있습니다. (컴퓨터 바이러스나 손상이 아닙니다.)
+본 프로그램은 무료 오픈소스 소프트웨어로 유료 Apple 개발자 계정 인증서가 등록되어 있지 않아, **최신 macOS(Sequoia 15 이상)**에서는 보안 정책에 따라 **총 2번의 [그래도 열기] 승인**이 필요합니다. (바이러스나 악성코드가 아니며 안심하고 여셔도 됩니다.)
 
-**간단 실행 방법 (최초 1회만 필요):**
-1. **가장 간편한 방법 (추천)**: Finder의 `응용 프로그램(/Applications)` 폴더에서 앱 아이콘을 **우클릭(또는 Control + 클릭)** ➔ **[열기]** 선택 ➔ 팝업창에서 **[열기]** 클릭
-2. **시스템 설정에서 허용**: **시스템 설정** ➔ **개인정보 보호 및 보안** ➔ 화면 아래 보안 섹션에서 **[확인 없이 열기]** 클릭
-3. **터미널 명령어 한 줄**: 터미널에서 `xattr -cr "/Applications/SDOCX Converter Lite.app"` 실행
+#### 방법 1: 시스템 설정에서 2회 승인 (GUI 표준 방식)
+1. **1단계 (DMG 열기)**: 다운로드한 `SDOCX_Converter_Lite.dmg`를 더블클릭합니다. 경고창이 뜨면 **[완료]**를 누른 뒤, **시스템 설정 ➔ 개인정보 보호 및 보안**으로 이동하여 화면 아래 보안 섹션에서 **`...차단했습니다` 옆의 [그래도 열기]** 클릭 ➔ Mac 암호를 입력합니다. 이제 열린 창에서 앱을 **`Applications(응용 프로그램)` 폴더로 드래그**합니다.
+2. **2단계 (앱 첫 실행)**: `응용 프로그램` 폴더에서 `SDOCX Converter Lite`를 더블클릭합니다. 경고창이 뜨면 **[완료]**를 누른 뒤, **시스템 설정 ➔ 개인정보 보호 및 보안**에서 **[그래도 열기]**를 한 번 더 클릭 ➔ Mac 암호를 입력합니다.
+3. 이제 영구 승인되어, 이후부터는 일반 앱과 똑같이 **더블클릭만으로 언제든 즉시 실행**됩니다!
 
-한 번 허용해 두시면 이후부터는 일반 앱과 똑같이 더블클릭으로 바로 열립니다.
+---
+
+#### 방법 2: 터미널 한 줄 명령어 (가장 빠르고 간편한 방법)
+터미널을 이용하시면 위의 2단계(경고 2회 + 암호 2회)를 거칠 필요 없이 바로 실행할 수 있습니다:
+
+* **DMG 열기 전 (가장 추천)**: 터미널을 열고 아래 명령어를 입력하여 다운로드된 DMG의 웹 격리 꼬리표를 바로 해제합니다:
+  ```bash
+  xattr -cr ~/Downloads/SDOCX_Converter_Lite.dmg
+  ```
+  *(이렇게 하면 시스템 설정에 들어갈 필요 없이 DMG가 바로 열립니다)*
+
+* **또는 앱을 `응용 프로그램` 폴더에 넣은 후**:
+  ```bash
+  xattr -cr "/Applications/SDOCX Converter Lite.app"
+  ```
 </details>
 
 ---
