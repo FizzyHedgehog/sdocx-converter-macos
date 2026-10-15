@@ -83,9 +83,24 @@
 - **Telegram Incoming Command Listener**:
   - Script: `python3 ~/.sdocx_telegram_agent/wait_for_telegram_macos.py`
   - Group: `sdocx-converter-macos` (Chat ID: `-100XXXXXXXXXX`)
-  - **Multi-image Album Bundling**: Telegram sends album photos as separate messages sharing a `media_group_id`. `dispatcher.py` runs a background thread `media_group_flusher` that groups all photos and text captions in the same bubble/album into a single combined event (`images: [...]`) after 1.0 second debounce. The agent always processes all photos and descriptions in a single bubble together in one turn.
+  - **Multi-image Album Bundling**: Telegram sends album photos as separate messages sharing a `media_group_id` (or without it when pasted in Telegram Desktop). `dispatcher.py` runs a background thread that aggregates all consecutive photos and text captions per chat ID into a single combined event (`images: [...]`) after a 2.5-second debounce window. The agent always processes all photos and descriptions in a single bubble together in one turn.
   - **OPERATIONAL RULE**:
     Whenever the user says **"텔레그램 대기"**, **"텔레그램 기다려"**, **"대기해"**, **"텔레그램 리스너 켜줘"**, or asks to wait for Telegram messages:
     You **MUST execute the listener as a background task**:
     `run_command(CommandLine="python3 ~/.sdocx_telegram_agent/wait_for_telegram_macos.py", Cwd="~/Projects/sdocx-converter-macos", WaitMsBeforeAsync=1000)`
     Do NOT simply reply "대기하겠습니다" with plain text. Always launch the background listener so you wake up reactively when a command arrives from the macOS Telegram group!
+
+---
+
+## 6. Developer Mode & Internal Testing Features (Hidden from Public)
+
+- **Activation Gesture**: In the Preferences window, tap/click the application icon/version area 7 times consecutively.
+- **Unlock Password**: `3208`
+- **Features Unlocked**:
+  - **Include Pre-release Updates**: Automatically enabled (`true`) when Developer Mode is unlocked. When enabled, `UpdateManager` inspects `/releases` instead of `/releases/latest`, allowing immediate testing of pre-release staging builds (e.g. `v1.0.1-beta`).
+  - **Simulation & Testing Tools**: Internal buttons to simulate update availability and verify download/restart workflows.
+  - **Modal Termination Workaround**: Uses `exit(0)` instead of `NSApplication.shared.terminate(nil)` after launching the updater helper script (`/tmp/sdocx_updater.sh`), bypassing macOS AppKit sheet modal termination locks.
+- **Strict Privacy & Sanitization Rule**:
+  - All references to Developer Mode, the 7-tap gesture, password `3208`, simulation options, and internal update toggles must NEVER appear in public release notes, public commit messages, or public issue trackers.
+  - This section in `PROJECT_CONTEXT.md` serves as the permanent internal reference.
+
