@@ -25,9 +25,12 @@
    - **NEVER** save, copy, or download generated `.dmg` (or `.apk`) files to the MacBook's `~/Desktop` or personal user storage.
    - Built `.dmg` files reside only within `dist/` and must be sent directly to Telegram using `send_telegram_document`.
    - **MANDATORY**: Whenever a fix or build is completed, deliver the `.dmg` file to Telegram AND always attach/provide the relevant GitHub link (branch or commit) in the Telegram message.
-2. **Hidden Feature Branch & Release Isolation**:
-   - When developing or testing new features, work strictly on isolated feature branches (e.g. `feature/...`).
-   - Do NOT overwrite public Release `v1.0.0` or `main` branch until the user explicitly tests and approves.
+2. **Staging & Pre-release Workflow**:
+   - Feature changes are maintained on `main` and tested via **GitHub Pre-releases** (e.g. `v1.0.1-beta`).
+   - Normal users querying `/releases/latest` will never see pre-releases.
+   - Only devices with Developer Mode enabled (7-tap gesture + password `3208`) with 'Include Pre-releases' enabled will detect and test pre-releases.
+   - Every pre-release release body MUST maintain a detailed changelog mapping specific user commands to implemented features.
+   - Do NOT overwrite the public stable release (`v1.0.0`) until the user explicitly approves.
 3. **English Code & Commits**:
    - All code comments, Git commit messages, and documentation must be written in clear English without emojis.
 4. **Preserve User Privacy**:
