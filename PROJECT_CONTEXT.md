@@ -21,12 +21,13 @@
 
 ## 2. Strict User Rules & Guidelines
 
-1. **NO Local MacBook Downloads**:
+1. **NO Local MacBook Downloads & Direct Telegram Delivery**:
    - **NEVER** save, copy, or download generated `.dmg` (or `.apk`) files to the MacBook's `~/Desktop` or personal user storage.
-   - Built `.dmg` files must be delivered directly to Telegram using `notify_telegram.py` and kept strictly within `dist/` (never exported to Desktop).
+   - Built `.dmg` files reside only within `dist/` and must be sent directly to Telegram using `send_telegram_document`.
+   - **MANDATORY**: Whenever a fix or build is completed, deliver the `.dmg` file to Telegram AND always attach/provide the relevant GitHub link (branch or commit) in the Telegram message.
 2. **Hidden Feature Branch & Release Isolation**:
    - When developing or testing new features, work strictly on isolated feature branches (e.g. `feature/...`).
-   - Do NOT overwrite public Release `v1.0.0` or `main` branch until the user explicitly tests and approves ("정식 배포해" / "올려줘").
+   - Do NOT overwrite public Release `v1.0.0` or `main` branch until the user explicitly tests and approves.
 3. **English Code & Commits**:
    - All code comments, Git commit messages, and documentation must be written in clear English without emojis.
 4. **Preserve User Privacy**:
