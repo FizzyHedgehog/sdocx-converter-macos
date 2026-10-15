@@ -28,7 +28,7 @@
 2. **Staging & Pre-release Workflow**:
    - Feature changes are maintained on `main` and tested via **GitHub Pre-releases** (e.g. `v1.0.1-beta`).
    - Normal users querying `/releases/latest` will never see pre-releases.
-   - Only devices with Developer Mode enabled (7-tap gesture + password `3208`) with 'Include Pre-releases' enabled will detect and test pre-releases.
+   - Only devices with Developer Mode enabled (7-tap gesture + password `3208`) with 'Include Pre-releases' enabled (automatically checked by default upon unlocking Developer Mode) will detect and test pre-releases.
    - Every pre-release release body MUST maintain a detailed changelog mapping specific user commands to implemented features.
    - **CRITICAL RULE FOR PROMOTING PRE-RELEASE TO PUBLIC RELEASE**:
      When the user requests to make a pre-release public (promote to stable release):
