@@ -28,6 +28,9 @@ python3 -m dmgbuild -s dmg_settings.py "$APP_NAME" "$FINAL_DMG"
 echo "==> 5. 생성된 DMG 자체 코드 서명"
 codesign --force --sign - "$FINAL_DMG"
 
+echo "==> 6. Spotlight 중복 노출 방지를 위해 dist 폴더 내 앱 번들 정리"
+rm -rf "$OUTPUT_DIR/$APP_NAME.app"
+
 echo "==========================================="
 echo "크롬 스타일 배포용 DMG 생성 완료!"
 echo "1. 프로젝트 출력물: $FINAL_DMG"

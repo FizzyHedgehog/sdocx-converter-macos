@@ -38,6 +38,10 @@
    - All code comments, Git commit messages, GitHub Release titles, descriptions, and documentation must be written strictly in clear, professional English without emojis.
 4. **Preserve User Privacy**:
    - Keep GitHub profile anonymous (`FizzyHedgehog`).
+5. **Spotlight Search Hygiene & Local App Cleanup**:
+   - macOS Spotlight indexes any `.app` bundle located on the Mac, including inside `dist/`.
+   - If an `.app` remains in `dist/` while another is in `/Applications/`, Spotlight displays duplicate app entries when searched by the user.
+   - **MANDATORY**: Never leave `.app` bundles in `dist/` or anywhere in the workspace. `build_dmg.sh` automatically removes `dist/$APP_NAME.app` after creating the DMG. If any local test app is installed for verification, always remove it completely immediately after testing finishes.
 
 ---
 
