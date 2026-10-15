@@ -635,104 +635,16 @@ struct PreferencesView: View {
                 .padding(8)
             }
 
-                    // 앱 완전 삭제 (Uninstall)
-                    GroupBox(label: Text(settings.tr("grp_uninstall")).font(.headline)) {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text(settings.tr("uninstall_desc"))
-                                .font(.system(size: 11))
-                                .foregroundColor(.secondary)
-
-                            HStack(alignment: .top, spacing: 6) {
-                                Image(systemName: "info.circle")
-                                    .font(.system(size: 11))
-                                    .foregroundColor(.orange)
-                                Text(settings.tr("uninstall_notice"))
-                                    .font(.system(size: 11))
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding(.vertical, 2)
-
-                            HStack {
-                                Spacer()
-                                Button(role: .destructive) {
-                                    settings.showUninstallAlert = true
-                                } label: {
-                                    Label(settings.tr("uninstall_btn"), systemImage: "trash")
-                                        .foregroundColor(.red)
-                                }
-                                .buttonStyle(.bordered)
-                                .controlSize(.small)
-                            }
-                        }
-                        .padding(8)
-                    }
                 }
                 .padding(24)
             }
         }
-        .frame(width: 520, height: 600)
-        .alert(isPresented: $settings.showUninstallAlert) {
-            Alert(
-                title: Text(settings.tr("uninstall_alert_title")),
-                message: Text(settings.tr("uninstall_alert_msg")),
-                primaryButton: .destructive(Text(settings.tr("uninstall_confirm_btn"))) {
-                    performCompleteUninstall()
-                },
-                secondaryButton: .cancel(Text(settings.tr("btn_cancel")))
-            )
-        }
+        .frame(width: 520, height: 500)
         .sheet(isPresented: $settings.showLicenseSheet) {
             LicenseSheetView(language: settings.language, onDismiss: {
                 settings.showLicenseSheet = false
             })
         }
-    }
-
-    private func performCompleteUninstall() {
-        // 1. Finder 빠른 동작 (Quick Action) workflow 삭제 및 캐시 갱신
-        QuickActionManager.shared.uninstall()
-
-        // 2. 환경설정 데이터 완전 초기화
-        if let bundleId = Bundle.main.bundleIdentifier {
-            UserDefaults.standard.removePersistentDomain(forName: bundleId)
-            UserDefaults.standard.synchronize()
-        }
-
-        // 3. 백그라운드 독립 셸 프로세스를 통해 완전 삭제 실행 (실행 중인 프로세스 종료 후 깔끔한 파일 삭제)
-        let appPath = Bundle.main.bundlePath
-        let isVolume = appPath.hasPrefix("/Volumes/")
-
-        let script = """
-        sleep 0.3
-        # 1. 사용자 설정 및 캐시 디렉터리 정리
-        rm -rf "$HOME/Library/Application Support/SDOCX Converter Lite" 2>/dev/null
-        rm -rf "$HOME/Library/Caches/com.fizzyhedgehog.sdocx-converter" 2>/dev/null
-        rm -f "$HOME/Library/Preferences/com.fizzyhedgehog.sdocx-converter.plist" 2>/dev/null
-        rm -rf "$HOME/Library/Services/SDOCX를 PDF로 변환.workflow" 2>/dev/null
-
-        # 2. /Applications 에 설치된 앱 휴지통 이동 또는 강제 삭제
-        if [ -d "/Applications/SDOCX Converter Lite.app" ]; then
-            osascript -e 'tell application "Finder" to delete POSIX file "/Applications/SDOCX Converter Lite.app"' 2>/dev/null || rm -rf "/Applications/SDOCX Converter Lite.app"
-        fi
-
-        # 3. 현재 앱이 /Applications 외의 쓰기 가능한 경로에서 실행 중인 경우 해당 앱도 삭제
-        if [ "\(isVolume)" = "false" ] && [ -d "\(appPath)" ] && [ "\(appPath)" != "/Applications/SDOCX Converter Lite.app" ]; then
-            osascript -e 'tell application "Finder" to delete POSIX file "\(appPath)"' 2>/dev/null || rm -rf "\(appPath)"
-        fi
-
-        # 4. LaunchServices 및 Finder 서비스 갱신
-        /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -u "/Applications/SDOCX Converter Lite.app" 2>/dev/null
-        /System/Library/CoreServices/pbs -flush 2>/dev/null || true
-        killall Finder 2>/dev/null || true
-        """
-
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/bin/bash")
-        process.arguments = ["-c", script]
-        try? process.run()
-
-        // 4. 앱 즉시 종료
-        NSApplication.shared.terminate(nil)
     }
 
     private func chooseFolder() {

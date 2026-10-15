@@ -34,7 +34,6 @@
 - **⚡️ Finder Quick Action Integration**: Right-click any `.sdocx` file or folder in Finder and convert to PDF instantly without opening the main window.
 - **🔔 Rich System Notifications**: Banner alerts with file details and app badge when conversions finish in the background.
 - **🌐 Automatic System Language Detection**: Automatically switches between English and Korean based on your macOS system preferences.
-- **🗑 Clean Uninstallation**: Built-in 1-click uninstaller in Preferences that cleans up Finder Quick Actions, preferences, and the app bundle safely.
 
 ---
 

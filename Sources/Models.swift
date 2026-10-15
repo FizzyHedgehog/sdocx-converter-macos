@@ -179,7 +179,6 @@ final class AppSettings: ObservableObject {
     }
 
     @Published var showLicenseSheet: Bool = false
-    @Published var showUninstallAlert: Bool = false
 
     init() {
         if let savedLang = defaults.string(forKey: "ui.language"),
@@ -300,13 +299,6 @@ struct Strings {
             "btn_start_new": "대기열 비우기 (처음으로)",
             "btn_reconvert": "다시 변환",
             "btn_new_conversion": "새 파일 변환하기",
-            "grp_uninstall": "앱 완전 삭제 (Uninstall)",
-            "uninstall_desc": "앱을 시스템에서 완전히 제거하고, 등록된 Finder 빠른 동작 및 모든 설정값을 초기화합니다.",
-            "uninstall_notice": "삭제 확인 시 앱이 즉시 종료되며, 백그라운드에서 시스템 파일 삭제가 시작됩니다.",
-            "uninstall_btn": "앱 및 빠른 동작 완전 삭제…",
-            "uninstall_alert_title": "SDOCX Converter Lite 완전 삭제",
-            "uninstall_alert_msg": "확인 버튼을 누르면 앱이 즉시 종료되고 백그라운드에서 완전 삭제가 시작됩니다.\n\n• /Applications의 앱 번들 제거\n• Finder 빠른 동작(Quick Action) 메뉴 삭제\n• 저장된 모든 환경설정 및 캐시 초기화\n\n정말로 삭제를 진행하시겠습니까?",
-            "uninstall_confirm_btn": "앱 종료 후 완전 삭제 시작",
             "btn_cancel": "취소"
         ],
         .en: [
@@ -386,13 +378,6 @@ struct Strings {
             "btn_start_new": "Clear Queue (Start Over)",
             "btn_reconvert": "Re-convert",
             "btn_new_conversion": "Convert New File",
-            "grp_uninstall": "Uninstall Application",
-            "uninstall_desc": "Completely remove the app, Finder Quick Actions, and all saved preferences from your system.",
-            "uninstall_notice": "Upon confirmation, the app will quit immediately and system file deletion starts in the background.",
-            "uninstall_btn": "Uninstall App & Quick Actions…",
-            "uninstall_alert_title": "Uninstall SDOCX Converter Lite",
-            "uninstall_alert_msg": "Clicking confirm will quit the app immediately and begin complete deletion in the background.\n\n• Remove app bundle from /Applications\n• Remove Finder Quick Action menu\n• Reset all saved preferences and caches\n\nAre you sure you want to proceed?",
-            "uninstall_confirm_btn": "Quit & Start Deletion",
             "btn_cancel": "Cancel"
         ]
 
