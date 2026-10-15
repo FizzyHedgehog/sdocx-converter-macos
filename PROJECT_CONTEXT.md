@@ -60,8 +60,16 @@
 
 ---
 
-## 5. Telegram Integration Setup
+## 5. Telegram Integration & Listener Rules
 
 - Telegram config: `~/.config/sdocx_telegram_config.json`
-- Notification utility: `~/.sdocx_telegram_agent/notify_telegram.py`
-- Topic Routing: Can send directly to the macOS topic using `message_thread_id`.
+- Notification utility: `python3 ~/.sdocx_telegram_agent/notify_telegram.py`
+- **Telegram Incoming Command Listener**:
+  - Script: `python3 ~/.sdocx_telegram_agent/wait_for_telegram_macos.py`
+  - Group: `sdocx-converter-macos` (Chat ID: `-100XXXXXXXXXX`)
+  - **OPERATIONAL RULE**:
+    Whenever the user says **"텔레그램 대기"**, **"텔레그램 기다려"**, **"대기해"**, or asks to wait for Telegram messages:
+    You **MUST execute the listener as a background task**:
+    `run_command(CommandLine="python3 ~/.sdocx_telegram_agent/wait_for_telegram_macos.py", Cwd="~/Projects/sdocx-converter-macos", WaitMsBeforeAsync=1000)`
+    Do NOT simply reply "대기하겠습니다" with plain text. Always launch the background listener so you wake up reactively when a command arrives from the macOS Telegram group!
+
