@@ -12,7 +12,7 @@
 - **Local Workspace**: `~/Projects/sdocx-converter-macos`
 - **GitHub Repository**: [FizzyHedgehog/sdocx-converter-macos](https://github.com/FizzyHedgehog/sdocx-converter-macos)
 - **Default Branch**: `main`
-- **Release Status**: `v1.0.0` (Asset: `SDOCX_Converter.dmg`, 5.70 MB)
+- **Release Status**: `v1.1.0` (Asset: `SDOCX_Converter.dmg`)
 - **Bundle Identifier**: `com.fizzyhedgehog.sdocx-converter`
 - **Git Author**: `FizzyHedgehog <fizzyhedgehog@users.noreply.github.com>`
 - **GitHub Personal Access Token**: Stored securely in `~/.config/github_token.txt` (Never commit tokens to git!)
@@ -68,6 +68,7 @@
 - Stripped all "Lite" references across all Swift sources, plists, and build scripts.
 - Chrome-style symmetric DMG window layout with centered icons and clean English visual cues.
 - Replaced outdated `SDOCX_Converter_Lite.dmg` with `SDOCX_Converter.dmg` in GitHub Release v1.0.0.
+- Released v1.1.0: Integrated in-app auto-updater, high-resolution vector squircle icon, reactive language switching, DMG installation checks, and automatic DMG volume unmounting.
 - Cleaned up all Desktop build artifacts.
 
 ---
