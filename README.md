@@ -81,8 +81,8 @@ If prompted by Gatekeeper on the first run:
 
 ### Build Steps
 ```bash
-git clone https://github.com/FizzyHedgehog/sdocx-converter.git
-cd sdocx-converter
+git clone https://github.com/FizzyHedgehog/sdocx-converter-macos.git
+cd sdocx-converter-macos
 
 # Build the native macOS application bundle
 ./build_native.sh
