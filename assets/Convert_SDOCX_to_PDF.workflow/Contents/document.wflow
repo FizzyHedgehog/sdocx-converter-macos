@@ -52,7 +52,7 @@
 				<dict>
 					<key>source</key>
 					<string>on run {input, parameters}
-	set enginePath to "/Applications/SDOCX Converter Lite.app/Contents/Resources/sdocx2pdf-macOS-arm64"
+	set enginePath to "/Applications/SDOCX Converter.app/Contents/Resources/sdocx2pdf-macOS-arm64"
 	set successCount to 0
 	set lastStem to ""
 	set allFiles to {}
@@ -101,8 +101,8 @@
 		end try
 	end repeat
 	
-	set appBin to "/Applications/SDOCX Converter Lite.app/Contents/MacOS/SDOCX Converter Lite"
-	set notifTitle to "SDOCX Converter Lite"
+	set appBin to "/Applications/SDOCX Converter.app/Contents/MacOS/SDOCX Converter"
+	set notifTitle to "SDOCX Converter"
 	if successCount is 1 then
 		set notifMsg to "'" &amp; lastStem &amp; ".sdocx' 변환이 완료되었습니다."
 		try

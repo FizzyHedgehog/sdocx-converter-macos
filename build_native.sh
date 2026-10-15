@@ -1,10 +1,10 @@
 #!/bin/bash
-# SDOCX Converter Lite (SwiftUI Native) 빌드 및 설치 스크립트
+# SDOCX Converter (SwiftUI Native) 빌드 및 설치 스크립트
 # 개인정보 익명화(FizzyHedgehog) 및 라이선스 준수 적용
 set -euo pipefail
 cd "$(dirname "$0")"
 
-APP_NAME="SDOCX Converter Lite"
+APP_NAME="SDOCX Converter"
 BUNDLE_ID="com.fizzyhedgehog.sdocx-converter"
 OUTPUT_DIR="dist"
 APP_BUNDLE="$OUTPUT_DIR/$APP_NAME.app"

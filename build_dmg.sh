@@ -1,11 +1,11 @@
 #!/bin/bash
-# SDOCX Converter Lite 배포용 DMG 빌드 스크립트 (Chrome 스타일 대칭 디자인)
+# SDOCX Converter 배포용 DMG 빌드 스크립트 (Chrome 스타일 대칭 디자인)
 # 개인정보 익명화(FizzyHedgehog) 및 라이선스 준수 적용
 set -euo pipefail
 cd "$(dirname "$0")"
 
-APP_NAME="SDOCX Converter Lite"
-DMG_NAME="SDOCX_Converter_Lite"
+APP_NAME="SDOCX Converter"
+DMG_NAME="SDOCX_Converter"
 OUTPUT_DIR="dist"
 FINAL_DMG="$OUTPUT_DIR/${DMG_NAME}.dmg"
 DESKTOP_DMG="$HOME/Desktop/${DMG_NAME}.dmg"
@@ -41,5 +41,5 @@ du -sh "$FINAL_DMG"
 echo "==========================================="
 
 if [ -f "scripts/notify_telegram.py" ]; then
-    python3 scripts/notify_telegram.py "🎉 <b>SDOCX Converter Lite</b> 배포용 DMG 빌드가 성공적으로 완료되었습니다! (바탕화면 SDOCX_Converter_Lite.dmg)" || true
+    python3 scripts/notify_telegram.py "<b>SDOCX Converter</b> 배포용 DMG 빌드가 성공적으로 완료되었습니다! (바탕화면 SDOCX_Converter.dmg)" || true
 fi

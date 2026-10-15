@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# SDOCX Converter Lite DMG Build Settings
+# SDOCX Converter DMG Build Settings
 # Chrome 스타일 대칭 레이아웃 (좌측 앱, 우측 Applications, 중앙 화살표 배경)
 
 import os
 
 # 볼륨 정보
-volume_name = 'SDOCX Converter Lite'
+volume_name = 'SDOCX Converter'
 format = 'UDZO'
 filesystem = 'HFS+'
 
@@ -37,7 +37,7 @@ scroll_position = (0.0, 0.0)
 
 # 포함 파일
 files = [
-    ('dist/SDOCX Converter Lite.app', 'SDOCX Converter Lite.app'),
+    ('dist/SDOCX Converter.app', 'SDOCX Converter.app'),
     ('LICENSE.txt', 'LICENSE.txt')
 ]
 
@@ -47,10 +47,10 @@ symlinks = {
 }
 
 # 대칭 아이콘 위치 (가운데 x=320 기준 정확한 좌우 대칭)
-# 좌측: SDOCX Converter Lite.app (x=160, y=205)
+# 좌측: SDOCX Converter.app (x=160, y=205)
 # 우측: Applications (x=480, y=205)
 icon_locations = {
-    'SDOCX Converter Lite.app': (160, 205),
+    'SDOCX Converter.app': (160, 205),
     'Applications': (480, 205)
 }
 
@@ -58,5 +58,4 @@ icon_locations = {
 hide = ['LICENSE.txt']
 
 # .app 확장자 숨기기
-hide_extensions = ['SDOCX Converter Lite.app']
-
+hide_extensions = ['SDOCX Converter.app']
