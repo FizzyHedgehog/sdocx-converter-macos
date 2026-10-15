@@ -41,15 +41,16 @@
 
 ### Method 1: Direct DMG Download (Recommended)
 1. Download **`SDOCX_Converter_Lite.dmg`** from [GitHub Releases](https://github.com/FizzyHedgehog/sdocx-converter-lite/releases).
-2. Open the disk image.
-3. Drag **SDOCX Converter Lite** to your **Applications** folder.
+2. Open the disk image (`.dmg`).
+3. **1-Click Auto Install (New!)**: Simply double-click **SDOCX Converter Lite** directly in the DMG window. When prompted, click **"Move to Applications Folder"**. The app will automatically install to `/Applications`, launch, and eject the DMG cleanly!
+   *(Or drag the app to the **Applications** folder as usual).*
 
 > [!NOTE]
 > **First-time Launch on macOS (Gatekeeper)**  
 > Because SDOCX Converter Lite is a free, independent open-source project without a paid Apple Developer certificate ($99/year), macOS (especially **macOS Sequoia 15+**) requires confirming **"Open Anyway" twice** on first launch: once when opening the DMG, and once when opening the installed app.
 > 
 > **Standard GUI Method (System Settings — 2 Steps):**
-> 1. **Step 1 (Open DMG)**: Double-click `SDOCX_Converter_Lite.dmg`. When blocked, click **Done**. Go to **System Settings** ➔ **Privacy & Security**, scroll down to Security, and click **Open Anyway** next to the DMG warning ➔ enter your password. Drag the app to `/Applications`.
+> 1. **Step 1 (Open DMG)**: Double-click `SDOCX_Converter_Lite.dmg`. When blocked, click **Done**. Go to **System Settings** ➔ **Privacy & Security**, scroll down to Security, and click **Open Anyway** next to the DMG warning ➔ enter your password. Drag the app to `/Applications` or double-click to auto-move.
 > 2. **Step 2 (Open App)**: Open `/Applications` and double-click `SDOCX Converter Lite`. When blocked, click **Done**. Go to **System Settings** ➔ **Privacy & Security** again, click **Open Anyway** next to the app warning ➔ enter your password. (Only needed once; subsequent launches open immediately!).
 > 
 > **Fast Terminal Shortcuts (Bypasses both prompts in 1 second!):**
@@ -63,14 +64,24 @@
 >   ```
 
 <details>
-<summary><strong>🇰🇷 한국어 안내 (macOS Sequoia 15+ 최초 실행 시 2단계 승인 해결법)</strong></summary>
+<summary><strong>🇰🇷 한국어 안내 (1클릭 자동 설치 및 macOS Sequoia 15+ 최초 실행 가이드)</strong></summary>
 <br/>
 
+#### 🚀 초간편 1클릭 설치 (LetsMove 자동 이동 & DMG 자동 분리)
+1. 다운로드한 `SDOCX_Converter_Lite.dmg`를 엽니다.
+2. DMG 창 안에서 **`SDOCX Converter Lite` 앱을 바로 더블클릭**합니다.
+3. **"응용 프로그램 폴더로 이동"** 안내창이 뜨면 클릭합니다.
+4. 앱이 자동으로 `/Applications` 폴더로 복사 및 실행되고, **설치 가상 디스크(DMG)는 Finder 및 데스크탑에서 자동으로 깔끔하게 언마운트(제거)**됩니다!
+*(기존처럼 Applications 폴더 아이콘으로 드래그 앤 드롭하셔도 동일하게 설치됩니다.)*
+
+---
+
+#### 🛡 macOS Sequoia 15+ 최초 실행 시 2단계 승인 안내
 본 프로그램은 무료 오픈소스 소프트웨어로 유료 Apple 개발자 계정 인증서가 등록되어 있지 않아, **최신 macOS(Sequoia 15 이상)**에서는 보안 정책에 따라 **총 2번의 [그래도 열기] 승인**이 필요합니다. (바이러스나 악성코드가 아니며 안심하고 여셔도 됩니다.)
 
 #### 방법 1: 시스템 설정에서 2회 승인 (GUI 표준 방식)
-1. **1단계 (DMG 열기)**: 다운로드한 `SDOCX_Converter_Lite.dmg`를 더블클릭합니다. 경고창이 뜨면 **[완료]**를 누른 뒤, **시스템 설정 ➔ 개인정보 보호 및 보안**으로 이동하여 화면 아래 보안 섹션에서 **`...차단했습니다` 옆의 [그래도 열기]** 클릭 ➔ Mac 암호를 입력합니다. 이제 열린 창에서 앱을 **`Applications(응용 프로그램)` 폴더로 드래그**합니다.
-2. **2단계 (앱 첫 실행)**: `응용 프로그램` 폴더에서 `SDOCX Converter Lite`를 더블클릭합니다. 경고창이 뜨면 **[완료]**를 누른 뒤, **시스템 설정 ➔ 개인정보 보호 및 보안**에서 **[그래도 열기]**를 한 번 더 클릭 ➔ Mac 암호를 입력합니다.
+1. **1단계 (DMG 열기)**: 다운로드한 `SDOCX_Converter_Lite.dmg`를 더블클릭합니다. 경고창이 뜨면 **[완료]**를 누른 뒤, **시스템 설정 ➔ 개인정보 보호 및 보안**으로 이동하여 화면 아래 보안 섹션에서 **`...차단했습니다` 옆의 [그래도 열기]** 클릭 ➔ Mac 암호를 입력합니다.
+2. **2단계 (앱 첫 실행)**: 앱을 실행할 때 경고창이 뜨면 **[완료]**를 누른 뒤, **시스템 설정 ➔ 개인정보 보호 및 보안**에서 **[그래도 열기]**를 한 번 더 클릭 ➔ Mac 암호를 입력합니다.
 3. 이제 영구 승인되어, 이후부터는 일반 앱과 똑같이 **더블클릭만으로 언제든 즉시 실행**됩니다!
 
 ---
