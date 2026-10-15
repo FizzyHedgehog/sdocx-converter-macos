@@ -642,6 +642,16 @@ struct PreferencesView: View {
                                 .font(.system(size: 11))
                                 .foregroundColor(.secondary)
 
+                            HStack(alignment: .top, spacing: 6) {
+                                Image(systemName: "info.circle")
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.orange)
+                                Text(settings.tr("uninstall_notice"))
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.vertical, 2)
+
                             HStack {
                                 Spacer()
                                 Button(role: .destructive) {
