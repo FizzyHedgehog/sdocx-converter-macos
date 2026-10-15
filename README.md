@@ -2,9 +2,6 @@
 
 Fast, native macOS GUI app and Finder Quick Action to convert Samsung Notes (`.sdocx`) files to lossless vector PDFs.
 
-<p align="center">
-  <img src="assets/notification_icon.png" width="128" height="128" alt="SDOCX Converter Icon" />
-</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/platform-macOS%2011.0%2B-blue" alt="macOS 11.0+" />
