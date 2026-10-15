@@ -456,6 +456,7 @@ struct InitialPermissionSheet: View {
 // MARK: - 설정 창 (Preferences)
 struct PreferencesView: View {
     @ObservedObject var settings: AppSettings
+    @ObservedObject private var updateManager = UpdateManager.shared
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -608,6 +609,108 @@ struct PreferencesView: View {
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.small)
+                }
+                .padding(8)
+            }
+
+            // 소프트웨어 업데이트
+            GroupBox(label: HStack(spacing: 6) {
+                Text(settings.tr("grp_updates")).font(.headline)
+                if updateManager.hasUpdate {
+                    Circle()
+                        .fill(Color.red)
+                        .frame(width: 8, height: 8)
+                }
+            }) {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text(String(format: settings.tr("update_current_ver"), updateManager.currentVersion))
+                                .font(.system(size: 12, weight: .semibold))
+
+                            if updateManager.hasUpdate {
+                                Text(String(format: settings.tr("update_available_notice"), updateManager.latestVersion))
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.green)
+                            } else if updateManager.statusMessage == "up_to_date" {
+                                Text(settings.tr("update_up_to_date"))
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.secondary)
+                            } else if !updateManager.statusMessage.isEmpty {
+                                Text(updateManager.statusMessage)
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        Spacer()
+
+                        if updateManager.isChecking {
+                            ProgressView()
+                                .controlSize(.small)
+                        } else if updateManager.hasUpdate {
+                            if updateManager.isDownloading {
+                                Button(settings.tr("update_cancel_btn")) {
+                                    updateManager.cancelDownload()
+                                }
+                                .buttonStyle(.bordered)
+                                .controlSize(.small)
+                            } else {
+                                Button(settings.tr("update_now_btn")) {
+                                    updateManager.startUpdate()
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .controlSize(.small)
+                            }
+                        } else {
+                            Button(settings.tr("update_check_btn")) {
+                                updateManager.checkForUpdates(silent: false)
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.small)
+                        }
+                    }
+
+                    if updateManager.isDownloading {
+                        VStack(alignment: .leading, spacing: 4) {
+                            ProgressView(value: updateManager.downloadProgress, total: 1.0)
+                            Text(updateManager.isUpdating
+                                 ? settings.tr("update_installing")
+                                 : String(format: settings.tr("update_downloading"), Int(updateManager.downloadProgress * 100)))
+                                .font(.system(size: 10))
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.top, 2)
+                    }
+
+                    if updateManager.hasUpdate && !updateManager.releaseNotes.isEmpty {
+                        DisclosureGroup(settings.tr("update_release_notes")) {
+                            ScrollView {
+                                Text(updateManager.releaseNotes)
+                                    .font(.system(size: 11))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(6)
+                            }
+                            .frame(height: 90)
+                            .background(Color(NSColor.textBackgroundColor))
+                            .cornerRadius(6)
+                        }
+                        .font(.system(size: 11))
+                    }
+
+                    if let error = updateManager.errorMessage {
+                        Text(error)
+                            .font(.system(size: 11))
+                            .foregroundColor(.red)
+                    }
+
+                    Divider()
+
+                    Toggle(settings.tr("opt_auto_check_updates"), isOn: $settings.automaticallyCheckForUpdates)
+                        .toggleStyle(.checkbox)
+                    Text(settings.tr("opt_auto_check_updates_desc"))
+                        .font(.system(size: 11))
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
                 }
                 .padding(8)
             }

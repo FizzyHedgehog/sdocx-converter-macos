@@ -178,6 +178,10 @@ final class AppSettings: ObservableObject {
         didSet { defaults.set(autoConvertOnOpenWith, forKey: "ui.autoConvertOnOpenWith") }
     }
 
+    @Published var automaticallyCheckForUpdates: Bool {
+        didSet { defaults.set(automaticallyCheckForUpdates, forKey: "ui.automaticallyCheckForUpdates") }
+    }
+
     @Published var showLicenseSheet: Bool = false
 
     init() {
@@ -212,6 +216,7 @@ final class AppSettings: ObservableObject {
         self.showMenuBarIcon = defaults.object(forKey: "ui.showMenuBarIcon") as? Bool ?? true
         self.enableNotifications = defaults.object(forKey: "ui.enableNotifications") as? Bool ?? true
         self.autoConvertOnOpenWith = defaults.object(forKey: "ui.autoConvertOnOpenWith") as? Bool ?? true
+        self.automaticallyCheckForUpdates = defaults.object(forKey: "ui.automaticallyCheckForUpdates") as? Bool ?? true
     }
 
     func tr(_ key: String) -> String {
@@ -299,7 +304,19 @@ struct Strings {
             "btn_start_new": "대기열 비우기 (처음으로)",
             "btn_reconvert": "다시 변환",
             "btn_new_conversion": "새 파일 변환하기",
-            "btn_cancel": "취소"
+            "btn_cancel": "취소",
+            "grp_updates": "소프트웨어 업데이트",
+            "update_current_ver": "현재 버전: v%@",
+            "update_available_notice": "새로운 v%@ 업데이트가 있습니다!",
+            "update_up_to_date": "현재 최신 버전을 사용하고 있습니다.",
+            "update_check_btn": "업데이트 확인",
+            "update_now_btn": "지금 업데이트",
+            "update_cancel_btn": "다운로드 취소",
+            "update_downloading": "업데이트 다운로드 중… (%d%%)",
+            "update_installing": "새 버전 설치 및 재실행 중…",
+            "update_release_notes": "릴리스 노트(업데이트 내역) 보기",
+            "opt_auto_check_updates": "앱 실행 시 자동으로 새 버전 확인",
+            "opt_auto_check_updates_desc": "체크를 해제하면 수동으로 '업데이트 확인'을 클릭할 때만 확인합니다."
         ],
         .en: [
             "app_title": "SDOCX → PDF Converter",
@@ -378,7 +395,19 @@ struct Strings {
             "btn_start_new": "Clear Queue (Start Over)",
             "btn_reconvert": "Re-convert",
             "btn_new_conversion": "Convert New File",
-            "btn_cancel": "Cancel"
+            "btn_cancel": "Cancel",
+            "grp_updates": "Software Update",
+            "update_current_ver": "Current Version: v%@",
+            "update_available_notice": "New version v%@ is available!",
+            "update_up_to_date": "You are using the latest version.",
+            "update_check_btn": "Check for Updates",
+            "update_now_btn": "Update Now",
+            "update_cancel_btn": "Cancel Download",
+            "update_downloading": "Downloading update… (%d%%)",
+            "update_installing": "Installing and restarting…",
+            "update_release_notes": "View Release Notes",
+            "opt_auto_check_updates": "Automatically check for updates on startup",
+            "opt_auto_check_updates_desc": "When disabled, updates are only checked when clicking 'Check for Updates'."
         ]
 
     ]

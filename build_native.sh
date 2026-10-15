@@ -28,6 +28,7 @@ swiftc -O -parse-as-library \
   Sources/Models.swift \
   Sources/ConverterService.swift \
   Sources/NotificationManager.swift \
+  Sources/UpdateManager.swift \
   Sources/MenuBarController.swift \
   Sources/LetsMoveManager.swift \
   Sources/Views.swift \

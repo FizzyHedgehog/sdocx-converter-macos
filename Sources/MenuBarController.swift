@@ -97,8 +97,11 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         menu.addItem(openItem)
 
         // 3. 설정…
+        let prefsTitle = UpdateManager.shared.hasUpdate
+            ? settings.tr("prefs_title") + "… (●)"
+            : settings.tr("prefs_title") + "…"
         let prefsItem = NSMenuItem(
-            title: settings.tr("prefs_title") + "…",
+            title: prefsTitle,
             action: #selector(handleOpenPreferences),
             keyEquivalent: ","
         )

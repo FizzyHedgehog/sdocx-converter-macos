@@ -456,6 +456,9 @@ struct SDOCXConverterNativeApp: App {
                     MenuBarController.shared.setup(settings: settings, viewModel: vm)
                     NotificationManager.shared.requestAuthorization()
                     QuickActionManager.shared.installIfNeeded()
+                    if settings.automaticallyCheckForUpdates {
+                        UpdateManager.shared.checkForUpdates(silent: true)
+                    }
                 }
                 .onOpenURL { url in
                     appDelegate.enqueueURLs([url])
@@ -484,6 +487,7 @@ struct SDOCXConverterNativeApp: App {
 struct MainContentView: View {
     @EnvironmentObject var settings: AppSettings
     @EnvironmentObject var vm: ConverterViewModel
+    @ObservedObject private var updateManager = UpdateManager.shared
 
     private var allSucceeded: Bool {
         !vm.items.isEmpty && vm.items.allSatisfy { $0.status.isSuccess }
@@ -497,9 +501,18 @@ struct MainContentView: View {
                     .font(.system(size: 19, weight: .bold))
                 Spacer()
                 Button(action: { vm.showPreferences = true }) {
-                    Image(systemName: "gearshape")
-                        .font(.system(size: 17))
-                        .foregroundColor(.secondary)
+                    ZStack(alignment: .topTrailing) {
+                        Image(systemName: "gearshape")
+                            .font(.system(size: 17))
+                            .foregroundColor(.secondary)
+
+                        if updateManager.hasUpdate {
+                            Circle()
+                                .fill(Color.red)
+                                .frame(width: 8, height: 8)
+                                .offset(x: 3, y: -3)
+                        }
+                    }
                 }
                 .buttonStyle(.plain)
                 .help(settings.tr("prefs_tooltip"))
