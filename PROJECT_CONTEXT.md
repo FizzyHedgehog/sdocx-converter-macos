@@ -83,6 +83,7 @@
 - **Telegram Incoming Command Listener**:
   - Script: `python3 ~/.sdocx_telegram_agent/wait_for_telegram_macos.py`
   - Group: `sdocx-converter-macos` (Chat ID: `-100XXXXXXXXXX`)
+  - **Multi-image Album Bundling**: Telegram sends album photos as separate messages sharing a `media_group_id`. `dispatcher.py` runs a background thread `media_group_flusher` that groups all photos and text captions in the same bubble/album into a single combined event (`images: [...]`) after 1.0 second debounce. The agent always processes all photos and descriptions in a single bubble together in one turn.
   - **OPERATIONAL RULE**:
     Whenever the user says **"텔레그램 대기"**, **"텔레그램 기다려"**, **"대기해"**, **"텔레그램 리스너 켜줘"**, or asks to wait for Telegram messages:
     You **MUST execute the listener as a background task**:
