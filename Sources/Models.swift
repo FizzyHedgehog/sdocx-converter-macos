@@ -252,15 +252,47 @@ final class AppSettings: ObservableObject {
         if remaining > 0 && remaining <= 3 {
             devToastMessage = String(format: tr("dev_mode_tap_count"), remaining)
         } else if remaining <= 0 {
-            isDeveloperMode = true
             versionTapCount = 0
-            devToastMessage = tr("dev_mode_enabled")
+            promptDeveloperPassword { [weak self] in
+                guard let self = self else { return }
+                self.isDeveloperMode = true
+                self.devToastMessage = self.tr("dev_mode_enabled")
+            }
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) { [weak self] in
             guard let self = self else { return }
             if self.devToastMessage == self.tr("dev_mode_enabled") || self.devToastMessage.contains("\(remaining)") {
                 self.devToastMessage = ""
+            }
+        }
+    }
+
+    private func promptDeveloperPassword(onSuccess: @escaping () -> Void) {
+        let alert = NSAlert()
+        let isKorean = language == .ko
+        alert.messageText = isKorean ? "개발자 모드 인증" : "Developer Authentication"
+        alert.informativeText = isKorean ? "암호를 입력해 주세요." : "Please enter the password."
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: isKorean ? "확인" : "OK")
+        alert.addButton(withTitle: isKorean ? "취소" : "Cancel")
+
+        let input = NSSecureTextField(frame: NSRect(x: 0, y: 0, width: 220, height: 24))
+        input.placeholderString = isKorean ? "암호" : "Password"
+        alert.accessoryView = input
+        alert.window.initialFirstResponder = input
+
+        NSApplication.shared.activate(ignoringOtherApps: true)
+        let response = alert.runModal()
+        if response == .alertFirstButtonReturn {
+            if input.stringValue == "3208" {
+                onSuccess()
+            } else {
+                let err = NSAlert()
+                err.messageText = isKorean ? "인증 실패" : "Authentication Failed"
+                err.informativeText = isKorean ? "암호가 올바르지 않습니다." : "Incorrect password."
+                err.addButton(withTitle: isKorean ? "확인" : "OK")
+                err.runModal()
             }
         }
     }
