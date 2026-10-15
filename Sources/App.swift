@@ -326,8 +326,27 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var lastHandledPaths: Set<String> = []
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        DispatchQueue.main.async {
-            LetsMoveManager.shared.checkAndMoveToApplicationsIfNeeded()
+        let currentPath = Bundle.main.bundlePath
+        let isRunningFromDiskImage = currentPath.hasPrefix("/Volumes/") || currentPath.contains("/AppTranslocation/")
+
+        if isRunningFromDiskImage {
+            let isKorean = Locale.preferredLanguages.first?.starts(with: "ko") == true
+            let alert = NSAlert()
+            let displayName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? "SDOCX Converter"
+
+            if isKorean {
+                alert.messageText = "설치 안내"
+                alert.informativeText = "\(displayName)을(를) 사용하려면 먼저 DMG 창에서 'Applications' 폴더로 드래그하여 설치해 주세요."
+                alert.addButton(withTitle: "확인")
+            } else {
+                alert.messageText = "Installation Required"
+                alert.informativeText = "Please drag \(displayName) to the Applications folder in the DMG window before opening."
+                alert.addButton(withTitle: "OK")
+            }
+            alert.alertStyle = .informational
+            NSApplication.shared.activate(ignoringOtherApps: true)
+            alert.runModal()
+            exit(0)
         }
     }
 
@@ -457,7 +476,7 @@ struct SDOCXConverterNativeApp: App {
                     NotificationManager.shared.requestAuthorization()
                     QuickActionManager.shared.installIfNeeded()
                     if settings.automaticallyCheckForUpdates {
-                        UpdateManager.shared.checkForUpdates(silent: true)
+                        UpdateManager.shared.checkForUpdates(silent: true, includePrereleases: settings.includePrereleaseUpdates)
                     }
                 }
                 .onOpenURL { url in

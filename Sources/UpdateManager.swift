@@ -33,7 +33,7 @@ final class UpdateManager: NSObject, ObservableObject, URLSessionDownloadDelegat
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
     }
 
-    func checkForUpdates(silent: Bool = false) {
+    func checkForUpdates(silent: Bool = false, includePrereleases: Bool = false, simulateTest: Bool = false) {
         guard !isChecking, !isDownloading else { return }
         isChecking = true
         if !silent {
@@ -41,7 +41,11 @@ final class UpdateManager: NSObject, ObservableObject, URLSessionDownloadDelegat
             errorMessage = nil
         }
 
-        guard let url = URL(string: "https://api.github.com/repos/FizzyHedgehog/sdocx-converter-macos/releases/latest") else {
+        let endpoint = includePrereleases
+            ? "https://api.github.com/repos/FizzyHedgehog/sdocx-converter-macos/releases"
+            : "https://api.github.com/repos/FizzyHedgehog/sdocx-converter-macos/releases/latest"
+
+        guard let url = URL(string: endpoint) else {
             isChecking = false
             return
         }
@@ -76,39 +80,56 @@ final class UpdateManager: NSObject, ObservableObject, URLSessionDownloadDelegat
                 }
 
                 do {
-                    if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                        if let tag = json["tag_name"] as? String {
-                            let remoteVer = tag.trimmingCharacters(in: CharacterSet(charactersIn: "vV"))
-                            let localVer = self.currentVersion.trimmingCharacters(in: CharacterSet(charactersIn: "vV"))
-
-                            self.latestVersion = remoteVer
-                            self.releaseNotes = json["body"] as? String ?? ""
-                            self.releaseURL = json["html_url"] as? String ?? ""
-
-                            // Look for DMG asset
-                            if let assets = json["assets"] as? [[String: Any]] {
-                                for asset in assets {
-                                    if let name = asset["name"] as? String, name.lowercased().hasSuffix(".dmg"),
-                                       let dl = asset["browser_download_url"] as? String {
-                                        self.downloadURL = dl
-                                        self.downloadSize = (asset["size"] as? Int64) ?? 0
-                                        break
-                                    }
-                                }
-                            }
-
-                            if self.isRemoteNewer(remote: remoteVer, local: localVer) {
-                                self.hasUpdate = true
-                                self.statusMessage = "v\(remoteVer)"
-                            } else {
-                                self.hasUpdate = false
-                                if !silent {
-                                    self.statusMessage = "up_to_date"
-                                }
-                            }
-                        } else if let msg = json["message"] as? String, !silent {
-                            self.errorMessage = msg
+                    var targetRelease: [String: Any]? = nil
+                    if includePrereleases {
+                        if let releases = try JSONSerialization.jsonObject(with: data) as? [[String: Any]], !releases.isEmpty {
+                            // Find the first non-draft release
+                            targetRelease = releases.first(where: { !($0["draft"] as? Bool ?? false) })
                         }
+                    } else {
+                        targetRelease = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+                    }
+
+                    if let json = targetRelease, let tag = json["tag_name"] as? String {
+                        let remoteVer = tag.trimmingCharacters(in: CharacterSet(charactersIn: "vV"))
+                        let localVer = simulateTest ? "0.9.0" : self.currentVersion.trimmingCharacters(in: CharacterSet(charactersIn: "vV"))
+                        let isPrerelease = json["prerelease"] as? Bool ?? false
+
+                        self.latestVersion = remoteVer
+                        self.releaseNotes = json["body"] as? String ?? ""
+                        self.releaseURL = json["html_url"] as? String ?? ""
+
+                        // Look for DMG asset
+                        self.downloadURL = ""
+                        self.downloadSize = 0
+                        if let assets = json["assets"] as? [[String: Any]] {
+                            for asset in assets {
+                                if let name = asset["name"] as? String, name.lowercased().hasSuffix(".dmg"),
+                                   let dl = asset["browser_download_url"] as? String {
+                                    self.downloadURL = dl
+                                    self.downloadSize = (asset["size"] as? Int64) ?? 0
+                                    break
+                                }
+                            }
+                        }
+
+                        if self.isRemoteNewer(remote: remoteVer, local: localVer) {
+                            self.hasUpdate = true
+                            if simulateTest {
+                                self.statusMessage = "v\(remoteVer) (Test Simulation)"
+                            } else if isPrerelease {
+                                self.statusMessage = "v\(remoteVer) (Beta/Pre-release)"
+                            } else {
+                                self.statusMessage = "v\(remoteVer)"
+                            }
+                        } else {
+                            self.hasUpdate = false
+                            if !silent {
+                                self.statusMessage = "up_to_date"
+                            }
+                        }
+                    } else if !silent {
+                        self.errorMessage = "No release found"
                     }
                 } catch {
                     if !silent {
@@ -120,8 +141,13 @@ final class UpdateManager: NSObject, ObservableObject, URLSessionDownloadDelegat
     }
 
     func isRemoteNewer(remote: String, local: String) -> Bool {
-        let rParts = remote.split(separator: ".").compactMap { Int($0) }
-        let lParts = local.split(separator: ".").compactMap { Int($0) }
+        func parseVersion(_ ver: String) -> [Int] {
+            let clean = ver.components(separatedBy: CharacterSet(charactersIn: "-+_")).first ?? ver
+            return clean.split(separator: ".").compactMap { Int($0) }
+        }
+
+        let rParts = parseVersion(remote)
+        let lParts = parseVersion(local)
         let count = max(rParts.count, lParts.count)
         for i in 0..<count {
             let r = i < rParts.count ? rParts[i] : 0

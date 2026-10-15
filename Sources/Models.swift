@@ -185,6 +185,10 @@ final class AppSettings: ObservableObject {
         didSet { defaults.set(automaticallyCheckForUpdates, forKey: "ui.automaticallyCheckForUpdates") }
     }
 
+    @Published var includePrereleaseUpdates: Bool {
+        didSet { defaults.set(includePrereleaseUpdates, forKey: "ui.includePrereleaseUpdates") }
+    }
+
     @Published var showLicenseSheet: Bool = false
 
     init() {
@@ -220,6 +224,7 @@ final class AppSettings: ObservableObject {
         self.enableNotifications = defaults.object(forKey: "ui.enableNotifications") as? Bool ?? true
         self.autoConvertOnOpenWith = defaults.object(forKey: "ui.autoConvertOnOpenWith") as? Bool ?? true
         self.automaticallyCheckForUpdates = defaults.object(forKey: "ui.automaticallyCheckForUpdates") as? Bool ?? true
+        self.includePrereleaseUpdates = defaults.bool(forKey: "ui.includePrereleaseUpdates")
     }
 
     func tr(_ key: String) -> String {
@@ -319,7 +324,12 @@ struct Strings {
             "update_installing": "새 버전 설치 및 재실행 중…",
             "update_release_notes": "릴리스 노트(업데이트 내역) 보기",
             "opt_auto_check_updates": "앱 실행 시 자동으로 새 버전 확인",
-            "opt_auto_check_updates_desc": "체크를 해제하면 수동으로 '업데이트 확인'을 클릭할 때만 확인합니다."
+            "opt_auto_check_updates_desc": "체크를 해제하면 수동으로 '업데이트 확인'을 클릭할 때만 확인합니다.",
+            "opt_include_prereleases": "베타 및 사전 공개(Pre-release) 버전 받기",
+            "opt_include_prereleases_desc": "GitHub에 사전 공개된 테스트 버전을 먼저 확인하고 설치할 수 있습니다 (일반 사용자에게는 비공개).",
+            "update_test_simulation_title": "개발자 모드: 업데이트 전체 흐름 테스트",
+            "update_test_simulation_btn": "시뮬레이션 실행",
+            "update_test_simulation_desc": "현재 버전을 v0.9.0으로 가정하여 실제 v1.0.0 업데이트 다운로드 및 설치 과정을 즉시 검증합니다."
         ],
         .en: [
             "app_title": "SDOCX → PDF Converter",
@@ -410,7 +420,12 @@ struct Strings {
             "update_installing": "Installing and restarting…",
             "update_release_notes": "View Release Notes",
             "opt_auto_check_updates": "Automatically check for updates on startup",
-            "opt_auto_check_updates_desc": "When disabled, updates are only checked when clicking 'Check for Updates'."
+            "opt_auto_check_updates_desc": "When disabled, updates are only checked when clicking 'Check for Updates'.",
+            "opt_include_prereleases": "Include Beta & Pre-release versions",
+            "opt_include_prereleases_desc": "Check and install test releases before official release (hidden from regular users).",
+            "update_test_simulation_title": "Developer Mode: Test Update Simulation",
+            "update_test_simulation_btn": "Run Simulation",
+            "update_test_simulation_desc": "Simulates local version as v0.9.0 to test the entire update and install flow immediately."
         ]
 
     ]

@@ -670,7 +670,7 @@ struct PreferencesView: View {
                             }
                         } else {
                             Button(settings.tr("update_check_btn")) {
-                                updateManager.checkForUpdates(silent: false)
+                                updateManager.checkForUpdates(silent: false, includePrereleases: settings.includePrereleaseUpdates)
                             }
                             .buttonStyle(.bordered)
                             .controlSize(.small)
@@ -718,6 +718,32 @@ struct PreferencesView: View {
                         .font(.system(size: 11))
                         .foregroundColor(.secondary)
                         .padding(.leading, 20)
+
+                    Toggle(settings.tr("opt_include_prereleases"), isOn: $settings.includePrereleaseUpdates)
+                        .toggleStyle(.checkbox)
+                    Text(settings.tr("opt_include_prereleases_desc"))
+                        .font(.system(size: 11))
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+
+                    Divider()
+
+                    HStack {
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text(settings.tr("update_test_simulation_title"))
+                                .font(.system(size: 12, weight: .medium))
+                            Text(settings.tr("update_test_simulation_desc"))
+                                .font(.system(size: 11))
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        Button(settings.tr("update_test_simulation_btn")) {
+                            updateManager.checkForUpdates(silent: false, includePrereleases: settings.includePrereleaseUpdates, simulateTest: true)
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                        .disabled(updateManager.isChecking || updateManager.isDownloading)
+                    }
                 }
                 .padding(8)
             }
