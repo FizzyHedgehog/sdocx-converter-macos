@@ -30,9 +30,12 @@
    - Normal users querying `/releases/latest` will never see pre-releases.
    - Only devices with Developer Mode enabled (7-tap gesture + password `3208`) with 'Include Pre-releases' enabled will detect and test pre-releases.
    - Every pre-release release body MUST maintain a detailed changelog mapping specific user commands to implemented features.
+   - **CRITICAL RULE FOR PROMOTING PRE-RELEASE TO PUBLIC RELEASE**:
+     When the user requests to make a pre-release public (promote to stable release):
+     You **MUST completely remove all developer-convenience and developer-related content** (e.g., Developer Mode, 7-tap gesture, password 3208, pre-release update toggles, internal development details) from the release notes / changelog before publishing. Only end-user features, fixes, and UX improvements should be visible to regular users.
    - Do NOT overwrite the public stable release (`v1.0.0`) until the user explicitly approves.
-3. **English Code & Commits**:
-   - All code comments, Git commit messages, and documentation must be written in clear English without emojis.
+3. **English Code, Commits & GitHub Releases**:
+   - All code comments, Git commit messages, GitHub Release titles, descriptions, and documentation must be written strictly in clear, professional English without emojis.
 4. **Preserve User Privacy**:
    - Keep GitHub profile anonymous (`FizzyHedgehog`).
 
