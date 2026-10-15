@@ -36,5 +36,5 @@ du -sh "$FINAL_DMG"
 echo "==========================================="
 
 if [ -f "~/.sdocx_telegram_agent/notify_telegram.py" ]; then
-    python3 -c "import sys; sys.path.append('~/.sdocx_telegram_agent'); import notify_telegram; notify_telegram.send_telegram_message('🍏 <b>SDOCX Converter</b> macOS 배포용 DMG 빌드가 완료되었습니다.'); notify_telegram.send_telegram_document('$FINAL_DMG', caption='🍎 SDOCX Converter (macOS DMG)')" || true
+    python3 -c "import sys; sys.path.append('~/.sdocx_telegram_agent'); import notify_telegram; notify_telegram.send_telegram_message('🍏 <b>SDOCX Converter</b> macOS 배포용 DMG 빌드가 완료되었습니다.', platform='macos'); notify_telegram.send_telegram_document('$FINAL_DMG', caption='🍎 SDOCX Converter (macOS DMG)', platform='macos')" || true
 fi
