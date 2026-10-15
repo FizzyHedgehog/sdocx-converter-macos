@@ -348,6 +348,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             alert.runModal()
             exit(0)
         }
+
+        // Automatically unmount the installation DMG volume if app is running from Applications
+        let homeAppDir = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Applications").path
+        if currentPath.hasPrefix("/Applications/") || currentPath.hasPrefix(homeAppDir) {
+            DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 1.0) {
+                let volPath = "/Volumes/SDOCX Converter"
+                if FileManager.default.fileExists(atPath: volPath) {
+                    let proc = Process()
+                    proc.executableURL = URL(fileURLWithPath: "/usr/sbin/diskutil")
+                    proc.arguments = ["unmount", volPath]
+                    try? proc.run()
+                }
+            }
+        }
     }
 
     var onOpenURLs: (([URL]) -> Void)? {
