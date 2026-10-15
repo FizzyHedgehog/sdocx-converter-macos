@@ -5,7 +5,8 @@ import AppKit
 struct DropZoneView: View {
     let itemCount: Int
     let isHovering: Bool
-    let tr: (String) -> String
+    var tr: ((String) -> String)? = nil
+    @EnvironmentObject var settings: AppSettings
 
     var body: some View {
         ZStack {
@@ -24,12 +25,12 @@ struct DropZoneView: View {
                     .font(.system(size: 34))
                     .foregroundColor(isHovering ? .accentColor : .secondary)
 
-                Text(tr("drop_prompt"))
+                Text(settings.tr("drop_prompt"))
                     .font(.system(size: 14, weight: .medium))
                     .multilineTextAlignment(.center)
                     .foregroundColor(.primary)
 
-                Text(tr("drop_subprompt"))
+                Text(settings.tr("drop_subprompt"))
                     .font(.system(size: 11))
                     .foregroundColor(.secondary)
             }
@@ -37,13 +38,15 @@ struct DropZoneView: View {
         }
         .frame(maxWidth: .infinity)
         .frame(height: 130)
+        .id(settings.language)
     }
 }
 
 // MARK: - 단일 파일 카드 뷰 (아이템이 1개일 때 표시)
 struct SingleItemCardView: View {
     let item: BatchItem
-    let tr: (String) -> String
+    var tr: ((String) -> String)? = nil
+    @EnvironmentObject var settings: AppSettings
     let onRemove: () -> Void
     let onAddMore: () -> Void
     let onReveal: () -> Void
@@ -109,7 +112,7 @@ struct SingleItemCardView: View {
                 // 우측 버튼들
                 if case .success = item.status {
                     Button(action: onReveal) {
-                        Label(tr("open_file"), systemImage: "folder")
+                        Label(settings.tr("open_file"), systemImage: "folder")
                             .font(.system(size: 11))
                     }
                     .buttonStyle(.bordered)
@@ -123,7 +126,7 @@ struct SingleItemCardView: View {
                     }
                     .buttonStyle(.plain)
                     .foregroundColor(.secondary)
-                    .help(tr("add_more"))
+                    .help(settings.tr("add_more"))
 
                     Button(action: onRemove) {
                         Image(systemName: "xmark.circle.fill")
@@ -131,7 +134,7 @@ struct SingleItemCardView: View {
                     }
                     .buttonStyle(.plain)
                     .foregroundColor(.secondary.opacity(0.8))
-                    .help("삭제")
+                    .help(settings.language == .ko ? "삭제" : "Remove")
                 }
             }
             .padding(12)
@@ -144,13 +147,15 @@ struct SingleItemCardView: View {
                     )
             )
         }
+        .id(settings.language)
     }
 }
 
 // MARK: - 대기열 목록 행 (BatchItemRowView)
 struct BatchItemRowView: View {
     let item: BatchItem
-    let tr: (String) -> String
+    var tr: ((String) -> String)? = nil
+    @EnvironmentObject var settings: AppSettings
     let onRemove: () -> Void
     let onReveal: (String) -> Void
 
@@ -223,10 +228,10 @@ struct BatchItemRowView: View {
                 }
                 .buttonStyle(.plain)
                 .foregroundColor(.secondary)
-                .help("제거")
+                .help(settings.language == .ko ? "제거" : "Remove")
 
             case .converting:
-                Text(tr("status_converting"))
+                Text(settings.tr("status_converting"))
                     .font(.system(size: 10))
                     .foregroundColor(.accentColor)
 
@@ -237,10 +242,10 @@ struct BatchItemRowView: View {
                 }
                 .buttonStyle(.borderless)
                 .foregroundColor(.accentColor)
-                .help(tr("reveal"))
+                .help(settings.tr("reveal"))
 
             case .failed(let msg):
-                Text(tr("status_failed"))
+                Text(settings.tr("status_failed"))
                     .font(.system(size: 10, weight: .medium))
                     .foregroundColor(.red)
                     .help(msg)
@@ -252,6 +257,7 @@ struct BatchItemRowView: View {
             RoundedRectangle(cornerRadius: 6)
                 .fill(Color(nsColor: .controlBackgroundColor).opacity(0.6))
         )
+        .id(settings.language)
     }
 }
 
@@ -259,7 +265,8 @@ struct BatchItemRowView: View {
 struct BatchQueueView: View {
     let items: [BatchItem]
     let isConverting: Bool
-    let tr: (String) -> String
+    var tr: ((String) -> String)? = nil
+    @EnvironmentObject var settings: AppSettings
     let onAddMore: () -> Void
     let onClearAll: () -> Void
     let onRemoveItem: (UUID) -> Void
@@ -274,9 +281,9 @@ struct BatchQueueView: View {
             // 대기열 상단 헤더
             HStack {
                 HStack(spacing: 6) {
-                    Text(tr("queue_title"))
+                    Text(settings.tr("queue_title"))
                         .font(.system(size: 13, weight: .bold))
-                    Text(String(format: tr("queue_count"), items.count))
+                    Text(String(format: settings.tr("queue_count"), items.count))
                         .font(.system(size: 11))
                         .padding(.horizontal, 7)
                         .padding(.vertical, 2)
@@ -288,13 +295,13 @@ struct BatchQueueView: View {
 
                 if !isConverting {
                     Button(action: onAddMore) {
-                        Label(tr("add_more"), systemImage: "plus")
+                        Label(settings.tr("add_more"), systemImage: "plus")
                             .font(.system(size: 11))
                     }
                     .buttonStyle(.borderless)
 
                     Button(action: onClearAll) {
-                        Text(tr("clear_all"))
+                        Text(settings.tr("clear_all"))
                             .font(.system(size: 11))
                             .foregroundColor(.secondary)
                     }
@@ -307,7 +314,7 @@ struct BatchQueueView: View {
                 VStack(spacing: 4) {
                     let pct = items.isEmpty ? 0 : Int((Double(finishedCount) / Double(items.count)) * 100)
                     HStack {
-                        Text(String(format: tr("batch_progress"), finishedCount, items.count, pct))
+                        Text(String(format: settings.tr("batch_progress"), finishedCount, items.count, pct))
                             .font(.system(size: 11))
                             .foregroundColor(.secondary)
                         Spacer()
@@ -324,7 +331,6 @@ struct BatchQueueView: View {
                     ForEach(items) { item in
                         BatchItemRowView(
                             item: item,
-                            tr: tr,
                             onRemove: { onRemoveItem(item.id) },
                             onReveal: onRevealItem
                         )
@@ -342,6 +348,7 @@ struct BatchQueueView: View {
                     )
             )
         }
+        .id(settings.language)
     }
 }
 

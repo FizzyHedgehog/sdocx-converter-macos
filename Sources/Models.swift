@@ -140,7 +140,10 @@ final class AppSettings: ObservableObject {
     private let defaults = UserDefaults.standard
 
     @Published var language: Language {
-        didSet { defaults.set(language.rawValue, forKey: "ui.language") }
+        didSet {
+            defaults.set(language.rawValue, forKey: "ui.language")
+            MenuBarController.shared.updateVisibility()
+        }
     }
 
     @Published var theme: ThemeMode {

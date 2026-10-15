@@ -22,6 +22,8 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         if settings.showMenuBarIcon {
             if statusItem == nil {
                 createStatusItem()
+            } else {
+                rebuildMenu()
             }
         } else {
             if let item = statusItem {

@@ -685,6 +685,7 @@ struct MainContentView: View {
         }
         .padding(20)
         .frame(width: 520)
+        .id(settings.language)
         .onAppear {
             if !settings.hasRequestedPermissions {
                 vm.showPermissionSheet = true
