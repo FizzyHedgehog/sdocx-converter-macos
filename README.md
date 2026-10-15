@@ -1,7 +1,7 @@
-# SDOCX Converter Lite
+# SDOCX Converter
 
 <p align="center">
-  <img src="assets/notification_icon.png" width="128" height="128" alt="SDOCX Converter Lite Icon" />
+  <img src="assets/notification_icon.png" width="128" height="128" alt="SDOCX Converter Icon" />
 </p>
 
 <p align="center">
@@ -17,12 +17,12 @@
 
 ---
 
-## 💎 Why SDOCX Converter Lite? (True Vector PDFs vs. Blurry Raster)
+## 💎 Why SDOCX Converter? (True Vector PDFs vs. Blurry Raster)
 
 > **No more blurry, pixelated notes!**  
 > When exporting notes directly to PDF within Samsung Notes, handwritten strokes and highlights are often rasterized into **low-resolution bitmap images**, resulting in severe pixelation and blurry text when zooming in.  
 > 
-> **SDOCX Converter Lite** solves this fundamentally: by exporting the original **`.sdocx`** file and processing it through our native engine, all handwriting, S-Pen strokes, and markers are accurately reconstructed into **infinitely scalable vector graphics (PDF vector paths)**. Your notes stay razor-sharp at any zoom level, print sizes, and on high-density Retina / 4K displays.
+> **SDOCX Converter** solves this fundamentally: by exporting the original **`.sdocx`** file and processing it through our native engine, all handwriting, S-Pen strokes, and markers are accurately reconstructed into **infinitely scalable vector graphics (PDF vector paths)**. Your notes stay razor-sharp at any zoom level, print sizes, and on high-density Retina / 4K displays.
 
 ---
 
@@ -39,20 +39,20 @@
 
 ## 📥 Installation & First-Time Launch (macOS Sequoia 15+)
 
-Because SDOCX Converter Lite is a free, open-source project without a paid Apple Developer certificate ($99/year), macOS requires a **2-step authorization on first setup (Step 1 for opening the DMG, Step 2 for launching the app)**.
+Because SDOCX Converter is a free, open-source project without a paid Apple Developer certificate ($99/year), macOS requires a **2-step authorization on first setup (Step 1 for opening the DMG, Step 2 for launching the app)**.
 
 Follow the exact flow below:
 
 ---
 
 ### 1️⃣ Step 1: Double-click DMG ➔ Blocked
-When you double-click the downloaded **`SDOCX_Converter_Lite.dmg`**, macOS blocks it with a security warning (*"Apple cannot check it for malicious software"*).
+When you double-click the downloaded **`SDOCX_Converter.dmg`**, macOS blocks it with a security warning (*"Apple cannot check it for malicious software"*).
 
 👉 **How to unblock (Choose either option):**
 - **Option A (System Settings)**: Click **Done** ➔ Go to **System Settings ➔ Privacy & Security** ➔ Scroll down to the Security section and click **Open Anyway** next to the DMG warning ➔ Enter your Mac password.
 - **Option B (Terminal)**: Open Terminal and run:
   ```bash
-  xattr -cr ~/Downloads/SDOCX_Converter_Lite.dmg
+  xattr -cr ~/Downloads/SDOCX_Converter.dmg
   ```
 *(The DMG will now open cleanly).*
 
@@ -66,7 +66,7 @@ When launched for the first time, macOS blocks the app again with a security war
 - **Option A (System Settings)**: Click **Done** ➔ Go to **System Settings ➔ Privacy & Security** ➔ Click **Open Anyway** next to the app warning ➔ Enter your Mac password.
 - **Option B (Terminal)**: Open Terminal and run:
   ```bash
-  xattr -cr "/Applications/SDOCX Converter Lite.app"
+  xattr -cr "/Applications/SDOCX Converter.app"
   ```
 
 ---
@@ -87,13 +87,13 @@ When launched for the first time, macOS blocks the app again with a security war
 ---
 
 #### 1️⃣ 1단계: DMG 파일 더블클릭 시 차단 발생
-다운로드한 **`SDOCX_Converter_Lite.dmg`** 파일을 더블클릭하면 *"Apple이 악성 소프트웨어가 있는지 확인할 수 없기 때문에..."* 경고창이 뜨며 차단됩니다.
+다운로드한 **`SDOCX_Converter.dmg`** 파일을 더블클릭하면 *"Apple이 악성 소프트웨어가 있는지 확인할 수 없기 때문에..."* 경고창이 뜨며 차단됩니다.
 
 👉 **해결 방법 (둘 중 편한 방법 선택):**
 - **방법 A (시스템 설정)**: 경고창에서 **[완료]** 클릭 ➔ **시스템 설정 ➔ 개인정보 보호 및 보안**으로 이동 ➔ 화면 아래 보안 섹션에서 **`...차단했습니다` 옆의 [그래도 열기]** 클릭 ➔ Mac 암호 입력
 - **방법 B (터미널 1줄 입력)**: 터미널을 열고 아래 명령어 실행:
   ```bash
-  xattr -cr ~/Downloads/SDOCX_Converter_Lite.dmg
+  xattr -cr ~/Downloads/SDOCX_Converter.dmg
   ```
 *(이제 DMG 파일이 정상적으로 열립니다).*
 
@@ -106,7 +106,7 @@ When launched for the first time, macOS blocks the app again with a security war
 - **방법 A (시스템 설정)**: 경고창에서 **[완료]** 클릭 ➔ **시스템 설정 ➔ 개인정보 보호 및 보안**에서 **`...차단했습니다` 옆의 [그래도 열기]**를 한 번 더 클릭 ➔ Mac 암호 입력
 - **방법 B (터미널 1줄 입력)**: 터미널을 열고 아래 명령어 실행:
   ```bash
-  xattr -cr "/Applications/SDOCX Converter Lite.app"
+  xattr -cr "/Applications/SDOCX Converter.app"
   ```
 
 ---
@@ -129,8 +129,8 @@ When launched for the first time, macOS blocks the app again with a security war
 
 ### Build Steps
 ```bash
-git clone https://github.com/FizzyHedgehog/sdocx-converter-lite.git
-cd sdocx-converter-lite
+git clone https://github.com/FizzyHedgehog/sdocx-converter.git
+cd sdocx-converter
 
 # Build the native macOS application bundle
 ./build_native.sh
@@ -138,7 +138,7 @@ cd sdocx-converter-lite
 # Build distribution DMG with custom layout
 ./build_dmg.sh
 ```
-The output `.dmg` will be generated in `dist/SDOCX_Converter_Lite.dmg`.
+The output `.dmg` will be generated in `dist/SDOCX_Converter.dmg`.
 
 ---
 
