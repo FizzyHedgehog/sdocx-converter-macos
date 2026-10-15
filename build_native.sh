@@ -29,6 +29,7 @@ swiftc -O -parse-as-library \
   Sources/ConverterService.swift \
   Sources/NotificationManager.swift \
   Sources/MenuBarController.swift \
+  Sources/LetsMoveManager.swift \
   Sources/Views.swift \
   Sources/App.swift \
   -o "build/$APP_NAME"

@@ -325,6 +325,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var lastHandledTimestamp: Date = .distantPast
     private var lastHandledPaths: Set<String> = []
 
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        DispatchQueue.main.async {
+            LetsMoveManager.shared.checkAndMoveToApplicationsIfNeeded()
+        }
+    }
+
     var onOpenURLs: (([URL]) -> Void)? {
         didSet {
             if onOpenURLs != nil && !pendingURLs.isEmpty {
