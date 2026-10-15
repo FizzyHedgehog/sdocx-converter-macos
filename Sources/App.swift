@@ -490,7 +490,7 @@ struct SDOCXConverterNativeApp: App {
                     NSApplication.shared.orderFrontStandardAboutPanel(
                         options: [
                             NSApplication.AboutPanelOptionKey.applicationName: "SDOCX Converter",
-                            NSApplication.AboutPanelOptionKey.version: "1.0.0",
+                            NSApplication.AboutPanelOptionKey.version: "1.0.1",
                             NSApplication.AboutPanelOptionKey(rawValue: "Copyright"): "Copyright © 2026 FizzyHedgehog. All rights reserved.",
                             NSApplication.AboutPanelOptionKey(rawValue: "Credits"): NSAttributedString(
                                 string: "Based on squ1dd13/sdocx2pdf (MIT License)\nPublished by FizzyHedgehog"

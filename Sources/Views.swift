@@ -807,7 +807,7 @@ struct PreferencesView: View {
             GroupBox(label: Text(settings.language == .ko ? "오픈소스 라이선스 및 크레딧" : "Open Source Licenses & Credits").font(.headline)) {
                 HStack {
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("SDOCX Converter v1.0.0")
+                        Text("SDOCX Converter v\(updateManager.currentVersion)")
                             .font(.system(size: 12, weight: .semibold))
                         Text("Copyright © 2026 FizzyHedgehog. All rights reserved.")
                             .font(.system(size: 11))

@@ -74,9 +74,9 @@ cat <<EOF > "$APP_BUNDLE/Contents/Info.plist"
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.0</string>
+	<string>1.0.1</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0</string>
+	<string>1.0.1</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2026 FizzyHedgehog. All rights reserved.</string>
 	<key>LSMinimumSystemVersion</key>
