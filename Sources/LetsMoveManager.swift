@@ -28,7 +28,7 @@ final class LetsMoveManager {
         // 3. 다국어 알림창 (한국어/영어 자동 감지)
         let isKorean = Locale.preferredLanguages.first?.starts(with: "ko") == true
         let alert = NSAlert()
-        let displayName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? "SDOCX Converter Lite"
+        let displayName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? "SDOCX Converter"
 
         if isKorean {
             alert.messageText = "\(displayName)을(를) 응용 프로그램 폴더로 이동하시겠습니까?"

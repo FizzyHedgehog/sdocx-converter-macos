@@ -25,7 +25,7 @@ final class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
         singleFileName: String?
     ) {
         let content = UNMutableNotificationContent()
-        content.title = "SDOCX Converter Lite"
+        content.title = "SDOCX Converter"
         content.sound = .default
 
         if let iconURL = Bundle.main.url(forResource: "notification_icon", withExtension: "png"),

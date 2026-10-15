@@ -616,7 +616,7 @@ struct PreferencesView: View {
             GroupBox(label: Text(settings.language == .ko ? "오픈소스 라이선스 및 크레딧" : "Open Source Licenses & Credits").font(.headline)) {
                 HStack {
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("SDOCX Converter Lite v1.0.0")
+                        Text("SDOCX Converter v1.0.0")
                             .font(.system(size: 12, weight: .semibold))
                         Text("Copyright © 2026 FizzyHedgehog. All rights reserved.")
                             .font(.system(size: 11))
@@ -687,7 +687,7 @@ struct LicenseSheetView: View {
             self.licenseContent = text
         } else {
             self.licenseContent = """
-            SDOCX Converter Lite
+            SDOCX Converter
             Copyright (c) 2026 FizzyHedgehog. All rights reserved.
 
             ================================================================================
@@ -723,7 +723,7 @@ struct LicenseSheetView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(language == .ko ? "오픈소스 라이선스 고지" : "Open Source License Notice")
                         .font(.headline)
-                    Text("SDOCX Converter Lite & squ1dd13/sdocx2pdf")
+                    Text("SDOCX Converter & squ1dd13/sdocx2pdf")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }

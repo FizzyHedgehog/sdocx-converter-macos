@@ -412,7 +412,7 @@ struct SDOCXConverterNativeApp: App {
 
     init() {
         if let idx = CommandLine.arguments.firstIndex(of: "--notify") {
-            let title = CommandLine.arguments.count > idx + 1 ? CommandLine.arguments[idx + 1] : "SDOCX Converter Lite"
+            let title = CommandLine.arguments.count > idx + 1 ? CommandLine.arguments[idx + 1] : "SDOCX Converter"
             let body = CommandLine.arguments.count > idx + 2 ? CommandLine.arguments[idx + 2] : "변환 완료"
 
             let center = UNUserNotificationCenter.current()
@@ -464,10 +464,10 @@ struct SDOCXConverterNativeApp: App {
         .windowResizability(.contentSize)
         .commands {
             CommandGroup(replacing: .appInfo) {
-                Button("About SDOCX Converter Lite") {
+                Button("About SDOCX Converter") {
                     NSApplication.shared.orderFrontStandardAboutPanel(
                         options: [
-                            NSApplication.AboutPanelOptionKey.applicationName: "SDOCX Converter Lite",
+                            NSApplication.AboutPanelOptionKey.applicationName: "SDOCX Converter",
                             NSApplication.AboutPanelOptionKey.version: "1.0.0",
                             NSApplication.AboutPanelOptionKey(rawValue: "Copyright"): "Copyright © 2026 FizzyHedgehog. All rights reserved.",
                             NSApplication.AboutPanelOptionKey(rawValue: "Credits"): NSAttributedString(

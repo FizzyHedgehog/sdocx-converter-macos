@@ -36,7 +36,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         if let button = item.button {
             button.image = loadMenuBarIcon()
             button.imagePosition = .imageOnly
-            button.toolTip = "SDOCX Converter Lite"
+            button.toolTip = "SDOCX Converter"
         }
 
         item.menu = menu
@@ -130,7 +130,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         handleOpenApp()
         NSApplication.shared.orderFrontStandardAboutPanel(
             options: [
-                NSApplication.AboutPanelOptionKey.applicationName: "SDOCX Converter Lite",
+                NSApplication.AboutPanelOptionKey.applicationName: "SDOCX Converter",
                 NSApplication.AboutPanelOptionKey.version: "1.0.0",
                 NSApplication.AboutPanelOptionKey(rawValue: "Copyright"): "Copyright © 2026 FizzyHedgehog. All rights reserved.",
                 NSApplication.AboutPanelOptionKey(rawValue: "Credits"): NSAttributedString(
