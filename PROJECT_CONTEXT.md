@@ -90,6 +90,9 @@
     You **MUST execute the listener as a background task**:
     `run_command(CommandLine="python3 ~/.sdocx_telegram_agent/wait_for_telegram_macos.py", Cwd="~/Projects/sdocx-converter-macos", WaitMsBeforeAsync=1000)`
     Do NOT simply reply "대기하겠습니다" with plain text. Always launch the background listener so you wake up reactively when a command arrives from the macOS Telegram group!
+  - **CONCISE STATUS OUTPUT RULE**:
+    작업 완료 후 백그라운드 텔레그램 리스너를 실행하여 턴을 종료할 때는 장황한 요약이나 번호 목록 대신, 아래와 같이 간결한 한 줄 문구만 출력합니다:
+    `현재 텔레그램 백그라운드 리스너(wait_for_telegram_macos.py)가 가동 중입니다.`
 
 ---
 
