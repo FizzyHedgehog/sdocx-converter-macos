@@ -26,6 +26,8 @@
    - Built `.dmg` files reside only within `dist/` and must be sent directly to Telegram using `notify_telegram.send_telegram_document`.
    - Any temporary files, test scripts, or intermediate build files extracted on the MacBook must be deleted immediately after delivery.
 2. **Direct Telegram Delivery & Full/Summary Dual Reporting**:
+   - **MANDATORY SEND SEQUENCE (Message First, File Below)**:
+     메시지(보고/설명)와 파일(DMG/APK)을 함께 전송할 때는 **반드시 설명 메시지(`send_full_and_summary`)를 먼저 전송**하고, **그 아래에 파일(`send_telegram_document`)을 후속 전송**합니다.
    - Build artifacts must be delivered directly to the user's Telegram chat using `notify_telegram.send_telegram_document(file_path, caption=..., platform="macos", reply_to_message_id=...)`.
    - **MANDATORY**: Whenever a fix or build is completed, deliver the `.dmg` file to Telegram AND always attach/provide the relevant GitHub link (branch, commit, or release) in the message.
    - Detailed task reports must always include both full content and a 3-line core summary via `notify_telegram.send_full_and_summary(full_content, summary_content, platform="macos", reply_to_message_id=...)`.
@@ -92,9 +94,9 @@
   - **Full & Summary Dual Reporting**:
     Detailed task reports and completion notifications to Telegram should always provide both full details and a 3-line core summary using:
     `notify_telegram.send_full_and_summary(full_content, summary_content, platform="macos", reply_to_message_id=...)`
-  - **Direct Deliverables Delivery**:
-    Deliver build artifacts (`.dmg`) directly to Telegram using:
-    `notify_telegram.send_telegram_document(file_path, caption=..., platform="macos", reply_to_message_id=...)`
+  - **Direct Deliverables Delivery & Order**:
+    Deliver build artifacts (`.dmg`) directly to Telegram using `notify_telegram.send_telegram_document`.
+    **MANDATORY SEQUENCE**: 메시지와 파일을 함께 전송할 때는 사용자가 맥락을 먼저 읽을 수 있도록 **반드시 설명 메시지(`send_full_and_summary`)를 먼저 보내고, 그 다음 바로 아래에 파일(`send_telegram_document`)을 전송**합니다.
 - **Telegram Incoming Command Listener**:
   - Script: `python3 ~/.sdocx_telegram_agent/wait_for_telegram_macos.py`
   - Group: `sdocx-converter-macos` (Chat ID: `-100XXXXXXXXXX`)
