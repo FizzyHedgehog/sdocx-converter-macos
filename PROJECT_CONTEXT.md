@@ -21,11 +21,15 @@
 
 ## 2. Strict User Rules & Guidelines
 
-1. **NO Local MacBook Downloads & Direct Telegram Delivery**:
+1. **NO Local MacBook Downloads & Immediate Cleanup**:
    - **NEVER** save, copy, or download generated `.dmg` (or `.apk`) files to the MacBook's `~/Desktop` or personal user storage.
-   - Built `.dmg` files reside only within `dist/` and must be sent directly to Telegram using `send_telegram_document`.
-   - **MANDATORY**: Whenever a fix or build is completed, deliver the `.dmg` file to Telegram AND always attach/provide the relevant GitHub link (branch or commit) in the Telegram message.
-2. **Staging & Pre-release Workflow**:
+   - Built `.dmg` files reside only within `dist/` and must be sent directly to Telegram using `notify_telegram.send_telegram_document`.
+   - Any temporary files, test scripts, or intermediate build files extracted on the MacBook must be deleted immediately after delivery.
+2. **Direct Telegram Delivery & Full/Summary Dual Reporting**:
+   - Build artifacts must be delivered directly to the user's Telegram chat using `notify_telegram.send_telegram_document(file_path, caption=..., platform="macos", reply_to_message_id=...)`.
+   - **MANDATORY**: Whenever a fix or build is completed, deliver the `.dmg` file to Telegram AND always attach/provide the relevant GitHub link (branch, commit, or release) in the message.
+   - Detailed task reports must always include both full content and a 3-line core summary via `notify_telegram.send_full_and_summary(full_content, summary_content, platform="macos", reply_to_message_id=...)`.
+3. **Staging & Pre-release Workflow**:
    - Feature changes are maintained on `main` and tested via **GitHub Pre-releases** (e.g. `v1.0.1-beta`).
    - Normal users querying `/releases/latest` will never see pre-releases.
    - Only devices with Developer Mode enabled (7-tap gesture + password `3208`) with 'Include Pre-releases' enabled (automatically checked by default upon unlocking Developer Mode) will detect and test pre-releases.
@@ -33,12 +37,14 @@
    - **CRITICAL RULE FOR PROMOTING PRE-RELEASE TO PUBLIC RELEASE**:
      When the user requests to make a pre-release public (promote to stable release):
      You **MUST completely remove all developer-convenience and developer-related content** (e.g., Developer Mode, 7-tap gesture, password 3208, pre-release update toggles, internal development details) from the release notes / changelog before publishing. Only end-user features, fixes, and UX improvements should be visible to regular users.
-   - Do NOT overwrite the public stable release (`v1.0.0`) until the user explicitly approves.
-3. **English Code, Commits & GitHub Releases**:
+   - Do NOT overwrite the public stable release until the user explicitly approves.
+4. **English Code, Commits & GitHub Releases (No Emojis)**:
    - All code comments, Git commit messages, GitHub Release titles, descriptions, and documentation must be written strictly in clear, professional English without emojis.
-4. **Preserve User Privacy**:
+5. **Preserve User Privacy, Terminal Silence & Guardrails**:
    - Keep GitHub profile anonymous (`FizzyHedgehog`).
-5. **Spotlight Search Hygiene & Local App Cleanup**:
+   - **Terminal Silence Principle**: Never use audible commands (`afplay`, `say`).
+   - **Timeout Guardrail**: Single task 30-minute timeout guardrail strictly observed.
+6. **Spotlight Search Hygiene & Local App Cleanup**:
    - macOS Spotlight indexes any `.app` bundle located on the Mac, including inside `dist/`.
    - If an `.app` remains in `dist/` while another is in `/Applications/`, Spotlight displays duplicate app entries when searched by the user.
    - **MANDATORY**: Never leave `.app` bundles in `dist/` or anywhere in the workspace. `build_dmg.sh` automatically removes `dist/$APP_NAME.app` after creating the DMG. If any local test app is installed for verification, always remove it completely immediately after testing finishes.
@@ -76,11 +82,18 @@
 ## 5. Telegram Integration & Listener Rules
 
 - **Telegram Configuration**: `~/.config/sdocx_telegram_config.json`
+  - macOS Chat ID: `-100XXXXXXXXXX` (`macos_chat_id`)
+  - Android Chat ID: `-100YYYYYYYYYY` (`android_chat_id`)
 - **Notification Utility**: `python3 ~/.sdocx_telegram_agent/notify_telegram.py`
   - Long responses are split safely within 3,800 characters.
-  - Can deliver messages, full/summary content, and binary artifacts (`.dmg`) directly to Telegram.
   - Automatically routes to the macOS group when specifying `platform="macos"`.
   - Supports Telegram native reply format via `reply_to_message_id`.
+  - **Full & Summary Dual Reporting**:
+    Detailed task reports and completion notifications to Telegram should always provide both full details and a 3-line core summary using:
+    `notify_telegram.send_full_and_summary(full_content, summary_content, platform="macos", reply_to_message_id=...)`
+  - **Direct Deliverables Delivery**:
+    Deliver build artifacts (`.dmg`) directly to Telegram using:
+    `notify_telegram.send_telegram_document(file_path, caption=..., platform="macos", reply_to_message_id=...)`
 - **Telegram Incoming Command Listener**:
   - Script: `python3 ~/.sdocx_telegram_agent/wait_for_telegram_macos.py`
   - Group: `sdocx-converter-macos` (Chat ID: `-100XXXXXXXXXX`)
