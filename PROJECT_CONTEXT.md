@@ -9,10 +9,10 @@
 
 - **Application Name**: SDOCX Converter (formerly Lite; all "Lite" branding has been completely removed)
 - **Target OS**: macOS 12.0+ (Universal / Apple Silicon & Intel)
-- **Local Workspace**: `~/Projects/sdocx-converter-macos`
+- **Local Workspace**: `~/Projects/sdocx-converter/sdocx-converter-macos` (symlinked from `~/Projects/sdocx-converter-macos`)
 - **GitHub Repository**: [FizzyHedgehog/sdocx-converter-macos](https://github.com/FizzyHedgehog/sdocx-converter-macos)
 - **Default Branch**: `main`
-- **Release Status**: `v1.1.0` (Asset: `SDOCX_Converter.dmg`)
+- **Release Status**: `v1.1.0` (Stable Public), `v1.2.0-preview` (Pre-release testing PNG embedding support)
 - **Bundle Identifier**: `com.fizzyhedgehog.sdocx-converter`
 - **Git Author**: `FizzyHedgehog <fizzyhedgehog@users.noreply.github.com>`
 - **GitHub Personal Access Token**: Stored securely in `~/.config/github_token.txt` (Never commit tokens to git!)
@@ -75,6 +75,7 @@
 - Chrome-style symmetric DMG window layout with centered icons and clean English visual cues.
 - Replaced outdated `SDOCX_Converter_Lite.dmg` with `SDOCX_Converter.dmg` in GitHub Release v1.0.0.
 - Released v1.1.0: Integrated in-app auto-updater, high-resolution vector squircle icon, reactive language switching, DMG installation checks, and automatic DMG volume unmounting.
+- Pre-release v1.2.0-preview: Upgraded native sdocx2pdf conversion engine to embed PNG images into output PDFs.
 - Cleaned up all Desktop build artifacts.
 
 ---
