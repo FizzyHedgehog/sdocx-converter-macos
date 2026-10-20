@@ -22,8 +22,21 @@ echo "==> 3. HiDPI 배경 TIFF 생성 확인"
 /usr/bin/tiffutil -cathidpicheck assets/dmg_background_en.png assets/dmg_background_en@2x.png -out assets/dmg_background_en.tiff
 
 echo "==> 4. dmgbuild를 통한 크롬 스타일 고화질 대칭 DMG 생성"
+# dmgbuild가 설치된 python3 인터프리터를 찾는다 (PATH의 python3에 없을 수 있음).
+PYTHON_BIN=""
+for candidate in python3 /Library/Frameworks/Python.framework/Versions/3.14/bin/python3 /usr/local/bin/python3 /usr/bin/python3; do
+  if command -v "$candidate" >/dev/null 2>&1 && "$candidate" -c "import dmgbuild" >/dev/null 2>&1; then
+    PYTHON_BIN="$candidate"
+    break
+  fi
+done
+if [ -z "$PYTHON_BIN" ]; then
+  echo "ERROR: dmgbuild를 사용할 수 있는 python3를 찾지 못했습니다. 'pip3 install dmgbuild pillow'로 설치하세요." >&2
+  exit 1
+fi
+echo "    사용 인터프리터: $PYTHON_BIN"
 rm -f "$FINAL_DMG"
-python3 -m dmgbuild -s dmg_settings.py "$APP_NAME" "$FINAL_DMG"
+"$PYTHON_BIN" -m dmgbuild -s dmg_settings.py "$APP_NAME" "$FINAL_DMG"
 
 echo "==> 5. 생성된 DMG 자체 코드 서명"
 codesign --force --sign - "$FINAL_DMG"

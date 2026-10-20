@@ -20,3 +20,6 @@ TELEGRAM_INSTRUCTIONS.md
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Local agent workspace data
+.workbuddy-ai/

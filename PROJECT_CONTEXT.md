@@ -12,7 +12,7 @@
 - **Local Workspace**: `~/Projects/sdocx-converter/sdocx-converter-macos` (symlinked from `~/Projects/sdocx-converter-macos`)
 - **GitHub Repository**: [FizzyHedgehog/sdocx-converter-macos](https://github.com/FizzyHedgehog/sdocx-converter-macos)
 - **Default Branch**: `main`
-- **Release Status**: `v1.1.0` (Stable Public), `v1.2.0-preview` (Pre-release testing PNG embedding support)
+- **Release Status**: `v1.1.0` (Stable Public), `v1.2.0` (rebuilt with the text-capable conversion engine)
 - **Bundle Identifier**: `com.fizzyhedgehog.sdocx-converter`
 - **Git Author**: `FizzyHedgehog <fizzyhedgehog@users.noreply.github.com>`
 - **GitHub Personal Access Token**: Stored securely in `~/.config/github_token.txt` (Never commit tokens to git!)
@@ -78,6 +78,11 @@
 - Replaced outdated `SDOCX_Converter_Lite.dmg` with `SDOCX_Converter.dmg` in GitHub Release v1.0.0.
 - Released v1.1.0: Integrated in-app auto-updater, high-resolution vector squircle icon, reactive language switching, DMG installation checks, and automatic DMG volume unmounting.
 - Pre-release v1.2.0-preview: Upgraded native sdocx2pdf conversion engine to embed PNG images into output PDFs.
+- v1.2.0 rebuild: Replaced the bundled `sdocx2pdf-macOS-arm64` with the shared Rust core at `sdocx2pdf` 0.4.0 (`feature/png-support`, commit `ad7d42a`, the same engine used by Android v1.2.0). The previous binary silently dropped every `Text` object; the new one renders text with true glyph metrics, paragraph alignment, Korean line wrapping, embedded NanumBarunGothic fonts, image rotation, and precise dash intervals.
+  - Verification: `모든 테스트.sdocx` -> 12 pages, 820 extracted characters vs. 826 in the reference PDF, whereas the previous bundled engine produced 0 characters.
+  - The Swift sources required no changes: the new CLI keeps `--pen-width-multiplier`, `--marker-width-multiplier`, `--detailed-errors`, `--basic-split`, `--auto-split`.
+  - Known engine limitations carried over: `.spi` stickers / lasso crops unsupported, highlighter opacity roughly 2x too strong, rotated text-box wrapping, page height +0.2877pt.
+  - `build_dmg.sh` now auto-detects a Python interpreter that actually has `dmgbuild` installed instead of assuming `python3` on PATH.
 - Cleaned up all Desktop build artifacts.
 
 ---

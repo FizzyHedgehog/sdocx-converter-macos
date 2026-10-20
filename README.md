@@ -22,6 +22,8 @@ When exporting notes directly to PDF within the Samsung Notes application, handw
 
 ## Key Features
 
+- **Full Text & Layout Fidelity**: Typed text is now rendered with true glyph metrics, paragraph alignment (left / center / right), Korean syllable-aware line wrapping, and the embedded NanumBarunGothic font family, so notes that mix handwriting and text convert completely.
+- **Images & Styling**: Embedded images keep their rotation and placement, and dashed / dotted strokes preserve their original dash intervals.
 - **Infinitely Scalable Vector Quality**: Preserves vector accuracy for all handwritten strokes without raster blur.
 - **Native Apple Silicon (ARM64) Performance**: Fast offline conversion powered by Swift and native binaries. Zero Electron or Python runtime dependencies for end users.
 - **Batch & Recursive Folder Conversion**: Drag & drop multiple `.sdocx` files or entire folders. Nested subdirectories are automatically discovered and queued.
