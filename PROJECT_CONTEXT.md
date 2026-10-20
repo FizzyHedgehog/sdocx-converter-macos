@@ -12,7 +12,7 @@
 - **Local Workspace**: `~/Projects/sdocx-converter/sdocx-converter-macos` (symlinked from `~/Projects/sdocx-converter-macos`)
 - **GitHub Repository**: [FizzyHedgehog/sdocx-converter-macos](https://github.com/FizzyHedgehog/sdocx-converter-macos)
 - **Default Branch**: `main`
-- **Release Status**: `v1.1.0` (Stable Public), `v1.2.0` (rebuilt with the text-capable conversion engine)
+- **Release Status**: `v1.2.0` (Stable Public / Latest, text-capable engine, bilingual release notes), `v1.2.0-preview` (historical pre-release, superseded)
 - **Bundle Identifier**: `com.fizzyhedgehog.sdocx-converter`
 - **Git Author**: `FizzyHedgehog <fizzyhedgehog@users.noreply.github.com>`
 - **GitHub Personal Access Token**: Stored securely in `~/.config/github_token.txt` (Never commit tokens to git!)
@@ -42,6 +42,7 @@
    - Do NOT overwrite the public stable release until the user explicitly approves.
 4. **English Code, Commits & GitHub Releases (No Emojis)**:
    - All code comments, Git commit messages, GitHub Release titles, descriptions, and documentation must be written strictly in clear, professional English without emojis.
+   - **Bilingual README & Release Notes**: The README and every GitHub Release body carry both English and Korean sections, using the same anchor pattern as the Android repository (`[English](#english) | [한국어](#한국어-설명)` plus `<a name="english"></a>` / `<a name="한국어"></a>` anchors). Korean text is exempt from the English-only rule and must read as native Korean, not machine translation.
 5. **Preserve User Privacy, Terminal Silence & Guardrails**:
    - Keep GitHub profile anonymous (`FizzyHedgehog`).
    - **Terminal Silence Principle**: Never use audible commands (`afplay`, `say`).
@@ -83,6 +84,7 @@
   - The Swift sources required no changes: the new CLI keeps `--pen-width-multiplier`, `--marker-width-multiplier`, `--detailed-errors`, `--basic-split`, `--auto-split`.
   - Known engine limitations carried over: `.spi` stickers / lasso crops unsupported, highlighter opacity roughly 2x too strong, rotated text-box wrapping, page height +0.2877pt.
   - `build_dmg.sh` now auto-detects a Python interpreter that actually has `dmgbuild` installed instead of assuming `python3` on PATH.
+- GitHub publishing (2026-10-21): rewrote `README.md` as a bilingual main page modeled on the Android repository (badges, feature list, requirements, installation, updating, known limitations, build steps, architecture, credits — each mirrored in Korean). Published release `v1.2.0` as the new latest with the `SDOCX_Converter.dmg` asset, and converted every existing release (`v1.0.0`, `v1.0.1-beta`, `v1.1.0`, `v1.2.0-preview`) to bilingual English/Korean notes. Repo description, topics, and a self-referential homepage link were also cleaned up.
 - Cleaned up all Desktop build artifacts.
 
 ---
