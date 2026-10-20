@@ -12,7 +12,7 @@
 - **Local Workspace**: `~/Projects/sdocx-converter/sdocx-converter-macos` (symlinked from `~/Projects/sdocx-converter-macos`)
 - **GitHub Repository**: [FizzyHedgehog/sdocx-converter-macos](https://github.com/FizzyHedgehog/sdocx-converter-macos)
 - **Default Branch**: `main`
-- **Release Status**: `v1.2.0` (Stable Public / Latest, text-capable engine, bilingual release notes), `v1.2.0-preview` (historical pre-release, superseded)
+- **Release Status**: `v1.2.0` (Stable Public / Latest, text-capable engine, bilingual release notes)
 - **Bundle Identifier**: `com.fizzyhedgehog.sdocx-converter`
 - **Git Author**: `FizzyHedgehog <fizzyhedgehog@users.noreply.github.com>`
 - **GitHub Personal Access Token**: Stored securely in `~/.config/github_token.txt` (Never commit tokens to git!)
@@ -79,13 +79,12 @@
 - Chrome-style symmetric DMG window layout with centered icons and clean English visual cues.
 - Replaced outdated `SDOCX_Converter_Lite.dmg` with `SDOCX_Converter.dmg` in GitHub Release v1.0.0.
 - Released v1.1.0: Integrated in-app auto-updater, high-resolution vector squircle icon, reactive language switching, DMG installation checks, and automatic DMG volume unmounting.
-- Pre-release v1.2.0-preview: Upgraded native sdocx2pdf conversion engine to embed PNG images into output PDFs.
-- v1.2.0 rebuild: Replaced the bundled `sdocx2pdf-macOS-arm64` with a build of the Rust core at `sdocx2pdf` 0.4.0 (`feature/png-support`, commit `ad7d42a`). The previous binary silently dropped every `Text` object; the new one renders text with true glyph metrics, paragraph alignment, Korean line wrapping, embedded NanumBarunGothic fonts, image rotation, and precise dash intervals.
+- v1.2.0 rebuild: Replaced the bundled `sdocx2pdf-macOS-arm64` with a build of the Rust core at `sdocx2pdf` 0.4.0 (`feature/png-support`, commit `ad7d42a`), which also carries the earlier PNG embedding work. The previous binary silently dropped every `Text` object; the new one renders text with true glyph metrics, paragraph alignment, Korean line wrapping, embedded NanumBarunGothic fonts, image rotation, and precise dash intervals.
   - Verification: `모든 테스트.sdocx` -> 12 pages, 820 extracted characters vs. 826 in the reference PDF, whereas the previous bundled engine produced 0 characters.
   - The Swift sources required no changes: the new CLI keeps `--pen-width-multiplier`, `--marker-width-multiplier`, `--detailed-errors`, `--basic-split`, `--auto-split`.
   - Known engine limitations carried over: `.spi` stickers / lasso crops unsupported, highlighter opacity roughly 2x too strong, rotated text-box wrapping, page height +0.2877pt.
   - `build_dmg.sh` now auto-detects a Python interpreter that actually has `dmgbuild` installed instead of assuming `python3` on PATH.
-- GitHub publishing (2026-10-21): rewrote `README.md` as a bilingual main page (badges, feature list, requirements, installation, updating, known limitations, build steps, architecture, credits — each mirrored in Korean). Published release `v1.2.0` as the new latest with the `SDOCX_Converter.dmg` asset, and converted every existing release (`v1.0.0`, `v1.0.1-beta`, `v1.1.0`, `v1.2.0-preview`) to bilingual English/Korean notes. Repo description, topics, and a self-referential homepage link were also cleaned up.
+- GitHub publishing (2026-10-21): rewrote `README.md` as a bilingual main page (badges, feature list, requirements, installation, updating, known limitations, build steps, architecture, credits — each mirrored in Korean). Published release `v1.2.0` as the new latest with the `SDOCX_Converter.dmg` asset, and converted the remaining releases (`v1.0.0`, `v1.0.1-beta`, `v1.1.0`) to bilingual English/Korean notes. The `v1.2.0-preview` release and tag were later deleted after its PNG embedding notes were folded into the `v1.2.0` release, leaving a single 1.2.0 entry. Repo description, topics, and a self-referential homepage link were also cleaned up.
 - Cleaned up all Desktop build artifacts.
 
 ---
