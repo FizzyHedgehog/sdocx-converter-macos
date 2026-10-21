@@ -12,7 +12,7 @@
 - **Local Workspace**: `~/Projects/sdocx-converter/sdocx-converter-macos` (symlinked from `~/Projects/sdocx-converter-macos`)
 - **GitHub Repository**: [FizzyHedgehog/sdocx-converter-macos](https://github.com/FizzyHedgehog/sdocx-converter-macos)
 - **Default Branch**: `main`
-- **Release Status**: `v1.2.2` (Stable Public / Latest, verified updates + path-free engine build), `v1.2.1`, `v1.2.0`
+- **Release Status**: `v1.2.0` (Stable Public / current `/releases/latest`), `v1.2.2` (pre-release: verified updates + path-free engine build)
 - **Bundle Identifier**: `com.fizzyhedgehog.sdocx-converter`
 - **Git Author**: `FizzyHedgehog <fizzyhedgehog@users.noreply.github.com>`
 - **GitHub Personal Access Token**: Stored securely in `~/.config/github_token.txt` (Never commit tokens to git!)
