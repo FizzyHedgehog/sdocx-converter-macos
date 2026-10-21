@@ -1,5 +1,6 @@
 import Foundation
 import AppKit
+import CryptoKit
 
 @MainActor
 final class UpdateManager: NSObject, ObservableObject, URLSessionDownloadDelegate {
@@ -12,6 +13,10 @@ final class UpdateManager: NSObject, ObservableObject, URLSessionDownloadDelegat
     @Published var releaseURL: String = ""
     @Published var downloadURL: String = ""
     @Published var downloadSize: Int64 = 0
+
+    /// SHA-256 published by the GitHub Releases API for the selected asset, lowercased hex.
+    /// Nil when the API does not expose a digest for the asset.
+    private var expectedDigest: String?
 
     @Published var isDownloading: Bool = false
     @Published var downloadProgress: Double = 0.0
@@ -30,7 +35,7 @@ final class UpdateManager: NSObject, ObservableObject, URLSessionDownloadDelegat
     }
 
     var currentVersion: String {
-        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.2.0"
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.2.1"
     }
 
     func checkForUpdates(silent: Bool = false, includePrereleases: Bool = false, simulateTest: Bool = false) {
@@ -102,12 +107,20 @@ final class UpdateManager: NSObject, ObservableObject, URLSessionDownloadDelegat
                         // Look for DMG asset
                         self.downloadURL = ""
                         self.downloadSize = 0
+                        self.expectedDigest = nil
                         if let assets = json["assets"] as? [[String: Any]] {
                             for asset in assets {
                                 if let name = asset["name"] as? String, name.lowercased().hasSuffix(".dmg"),
                                    let dl = asset["browser_download_url"] as? String {
                                     self.downloadURL = dl
                                     self.downloadSize = (asset["size"] as? Int64) ?? 0
+                                    // GitHub exposes "digest": "sha256:<hex>" for newer assets.
+                                    // Older assets have no digest, in which case the installer
+                                    // still verifies the bundle identifier and code signature.
+                                    if let digest = asset["digest"] as? String,
+                                       digest.lowercased().hasPrefix("sha256:") {
+                                        self.expectedDigest = String(digest.dropFirst("sha256:".count)).lowercased()
+                                    }
                                     break
                                 }
                             }
@@ -156,6 +169,20 @@ final class UpdateManager: NSObject, ObservableObject, URLSessionDownloadDelegat
             if r < l { return false }
         }
         return false
+    }
+
+    /// Streams a file through SHA-256 and returns lowercase hex, or nil when it cannot be read.
+    nonisolated static func sha256Hex(of url: URL) -> String? {
+        guard let handle = try? FileHandle(forReadingFrom: url) else { return nil }
+        defer { try? handle.close() }
+
+        var hasher = SHA256()
+        while true {
+            let chunk = handle.readData(ofLength: 1 << 20)
+            if chunk.isEmpty { break }
+            hasher.update(data: chunk)
+        }
+        return hasher.finalize().map { String(format: "%02x", $0) }.joined()
     }
 
     func startUpdate() {
@@ -208,6 +235,21 @@ final class UpdateManager: NSObject, ObservableObject, URLSessionDownloadDelegat
             try FileManager.default.copyItem(at: location, to: tempDMG)
 
             Task { @MainActor in
+                // Integrity check: the downloaded image must match the digest the GitHub
+                // Releases API reported for this asset. A mismatch means the bytes did not
+                // come from the release we inspected, so the update is discarded.
+                if let expected = self.expectedDigest {
+                    let actual = Self.sha256Hex(of: tempDMG)
+                    guard actual == expected else {
+                        try? FileManager.default.removeItem(at: tempDMG)
+                        self.isDownloading = false
+                        let isKorean = (UserDefaults.standard.string(forKey: "language") ?? "ko") == "ko"
+                        self.errorMessage = isKorean
+                            ? "업데이트 파일 검증에 실패했습니다. 설치를 중단합니다."
+                            : "Update verification failed. The installation was cancelled."
+                        return
+                    }
+                }
                 self.promptAndApplyUpdate(dmgURL: tempDMG)
             }
         } catch {
@@ -273,12 +315,23 @@ final class UpdateManager: NSObject, ObservableObject, URLSessionDownloadDelegat
 
         SOURCE_APP=$(find "$MOUNT_DIR" -maxdepth 1 -name "*.app" | head -n 1)
 
+        # Verify the replacement bundle before touching the installed app: it must carry our
+        # bundle identifier and a valid code signature. If verification fails the current
+        # installation is left untouched and relaunched.
+        VERIFIED=0
         if [ -n "$SOURCE_APP" ] && [ -d "$SOURCE_APP" ]; then
+            SOURCE_ID=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$SOURCE_APP/Contents/Info.plist" 2>/dev/null || echo "")
+            if [ "$SOURCE_ID" = "com.fizzyhedgehog.sdocx-converter" ] && /usr/bin/codesign --verify "$SOURCE_APP" >/dev/null 2>&1; then
+                VERIFIED=1
+            fi
+        fi
+
+        if [ "$VERIFIED" = "1" ]; then
             # Replace target app with newly downloaded version
             rm -rf "$TARGET_APP"
             cp -R "$SOURCE_APP" "$TARGET_APP"
 
-            # CRITICAL: Strip Gatekeeper quarantine attribute completely so no security prompt appears
+            # Strip Gatekeeper quarantine attribute completely so no security prompt appears
             xattr -cr "$TARGET_APP" 2>/dev/null || true
         fi
 

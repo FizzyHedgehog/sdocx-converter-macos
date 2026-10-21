@@ -12,7 +12,7 @@
 - **Local Workspace**: `~/Projects/sdocx-converter/sdocx-converter-macos` (symlinked from `~/Projects/sdocx-converter-macos`)
 - **GitHub Repository**: [FizzyHedgehog/sdocx-converter-macos](https://github.com/FizzyHedgehog/sdocx-converter-macos)
 - **Default Branch**: `main`
-- **Release Status**: `v1.2.0` (Stable Public / Latest, text-capable engine, bilingual release notes)
+- **Release Status**: `v1.2.1` (Stable Public / Latest, update integrity verification), `v1.2.0` (text-capable engine)
 - **Bundle Identifier**: `com.fizzyhedgehog.sdocx-converter`
 - **Git Author**: `FizzyHedgehog <fizzyhedgehog@users.noreply.github.com>`
 - **GitHub Personal Access Token**: Stored securely in `~/.config/github_token.txt` (Never commit tokens to git!)
@@ -34,11 +34,11 @@
 3. **Staging & Pre-release Workflow**:
    - Feature changes are maintained on `main` and tested via **GitHub Pre-releases** (e.g. `v1.0.1-beta`).
    - Normal users querying `/releases/latest` will never see pre-releases.
-   - Only devices with Developer Mode enabled (7-tap gesture + password `3208`) with 'Include Pre-releases' enabled (automatically checked by default upon unlocking Developer Mode) will detect and test pre-releases.
+   - Only devices with Developer Mode enabled (7-tap gesture + the unlock password defined in `Sources/Models.swift`) with 'Include Pre-releases' enabled (automatically checked by default upon unlocking Developer Mode) will detect and test pre-releases.
    - Every pre-release release body MUST maintain a detailed changelog mapping specific user commands to implemented features.
    - **CRITICAL RULE FOR PROMOTING PRE-RELEASE TO PUBLIC RELEASE**:
      When the user requests to make a pre-release public (promote to stable release):
-     You **MUST completely remove all developer-convenience and developer-related content** (e.g., Developer Mode, 7-tap gesture, password 3208, pre-release update toggles, internal development details) from the release notes / changelog before publishing. Only end-user features, fixes, and UX improvements should be visible to regular users.
+     You **MUST completely remove all developer-convenience and developer-related content** (e.g., Developer Mode, 7-tap gesture, the unlock password, pre-release update toggles, internal development details) from the release notes / changelog before publishing. Only end-user features, fixes, and UX improvements should be visible to regular users.
    - Do NOT overwrite the public stable release until the user explicitly approves.
 4. **English Code, Commits & GitHub Releases (No Emojis)**:
    - All code comments, Git commit messages, GitHub Release titles, descriptions, and documentation must be written strictly in clear, professional English without emojis.
@@ -92,8 +92,8 @@
 ## 5. Telegram Integration & Listener Rules
 
 - **Telegram Configuration**: `~/.config/sdocx_telegram_config.json`
-  - macOS Chat ID: `-100XXXXXXXXXX` (`macos_chat_id`)
-  - Android Chat ID: `-100YYYYYYYYYY` (`android_chat_id`)
+  - macOS chat ID: stored in the config file (`macos_chat_id`)
+  - Android chat ID: stored in the config file (`android_chat_id`)
 - **Notification Utility**: `python3 ~/.sdocx_telegram_agent/notify_telegram.py`
   - Long responses are split safely within 3,800 characters.
   - Automatically routes to the macOS group when specifying `platform="macos"`.
@@ -106,7 +106,7 @@
     **MANDATORY SEQUENCE**: 메시지와 파일을 함께 전송할 때는 사용자가 맥락을 먼저 읽을 수 있도록 **반드시 설명 메시지(`send_full_and_summary`)를 먼저 보내고, 그 다음 바로 아래에 파일(`send_telegram_document`)을 전송**합니다.
 - **Telegram Incoming Command Listener**:
   - Script: `python3 ~/.sdocx_telegram_agent/wait_for_telegram_macos.py`
-  - Group: `sdocx-converter-macos` (Chat ID: `-100XXXXXXXXXX`)
+  - Group: `sdocx-converter-macos` (chat ID from `~/.config/sdocx_telegram_config.json`)
   - **Multi-image Album Bundling**: Telegram sends album photos as separate messages sharing a `media_group_id` (or without it when pasted in Telegram Desktop). `dispatcher.py` runs a background thread that aggregates all consecutive photos and text captions per chat ID into a single combined event (`images: [...]`) after a 2.5-second debounce window. The agent always processes all photos and descriptions in a single bubble together in one turn.
   - **OPERATIONAL RULE**:
     Whenever the user says **"텔레그램 대기"**, **"텔레그램 기다려"**, **"대기해"**, **"텔레그램 리스너 켜줘"**, or asks to wait for Telegram messages:
@@ -122,12 +122,22 @@
 ## 6. Developer Mode & Internal Testing Features (Hidden from Public)
 
 - **Activation Gesture**: In the Preferences window, tap/click the application icon/version area 7 times consecutively.
-- **Unlock Password**: `3208`
+- **Unlock Password**: defined as a constant in `Sources/Models.swift` (`promptDeveloperPassword`); not recorded in documentation.
 - **Features Unlocked**:
   - **Include Pre-release Updates**: Automatically enabled (`true`) when Developer Mode is unlocked. When enabled, `UpdateManager` inspects `/releases` instead of `/releases/latest`, allowing immediate testing of pre-release staging builds (e.g. `v1.0.1-beta`).
   - **Simulation & Testing Tools**: Internal buttons to simulate update availability and verify download/restart workflows.
   - **Modal Termination Workaround**: Uses `exit(0)` instead of `NSApplication.shared.terminate(nil)` after launching the updater helper script (`/tmp/sdocx_updater.sh`), bypassing macOS AppKit sheet modal termination locks.
 - **Strict Privacy & Sanitization Rule**:
-  - All references to Developer Mode, the 7-tap gesture, password `3208`, simulation options, and internal update toggles must NEVER appear in public release notes, public commit messages, or public issue trackers.
+  - All references to Developer Mode, the 7-tap gesture, the unlock password, simulation options, and internal update toggles must NEVER appear in public release notes, public commit messages, or public issue trackers.
   - This section in `PROJECT_CONTEXT.md` serves as the permanent internal reference.
+
+---
+
+## 7. Update Security (v1.2.1 and later)
+
+- `UpdateManager` verifies the downloaded DMG against the `digest` field (`sha256:<hex>`) returned by the GitHub Releases API before offering installation. A mismatch deletes the temporary file, shows a localized error, and leaves the installed version untouched.
+- Assets published without a digest skip the hash check; the installer still verifies the bundle as described below.
+- The updater helper script validates the replacement bundle before touching the installed app: `CFBundleIdentifier` must equal `com.fizzyhedgehog.sdocx-converter` and `codesign --verify` must succeed. Use non-strict verification, because `dmgbuild` adds `com.apple.FinderInfo` to the app and that makes `--strict` fail on an otherwise valid bundle. If validation fails, the current installation is left in place and relaunched.
+- Every release note publishes the DMG SHA-256 so users can check a download manually with `shasum -a 256`.
+- Residual gap by design: the update that installs the first verifying build is performed by the previous, unverified updater. Protection applies from that build onward.
 

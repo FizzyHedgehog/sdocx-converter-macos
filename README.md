@@ -91,6 +91,18 @@ If Gatekeeper prompts on the first run:
 
 ---
 
+## Verifying Your Download
+
+Each release publishes the SHA-256 of `SDOCX_Converter.dmg`. To confirm that the file on your Mac is the file that was published:
+
+```bash
+shasum -a 256 ~/Downloads/SDOCX_Converter.dmg
+```
+
+Compare the result with the SHA-256 listed at the bottom of the release notes for your version. In addition, the app verifies every update it downloads against the digest reported by the GitHub Releases API, and checks the replacement bundle's identifier and code signature before installing it.
+
+---
+
 ## Known Limitations
 
 The current conversion engine is verified against reference documents, but the following items are not yet complete:
@@ -249,6 +261,18 @@ SDOCX Converter는 유료 Apple Developer 인증서가 없는 오픈소스 프�
 - **실행 시 자동 확인**: 새 버전이 있으면 GitHub Releases를 조용히 확인해 릴리즈 노트와 함께 원탭 다운로드 안내를 표시합니다.
 - **수동 확인**: **설정 > 소프트웨어 업데이트 > 업데이트 확인**에서 언제든지 확인할 수 있습니다.
 - **직접 재설치**: [Releases](https://github.com/FizzyHedgehog/sdocx-converter-macos/releases)에서 최신 `SDOCX_Converter.dmg`를 받아 `/Applications`의 앱을 교체해도 됩니다. 설정은 그대로 유지됩니다.
+
+---
+
+## 다운로드 검증
+
+각 릴리즈에는 `SDOCX_Converter.dmg`의 SHA-256이 함께 게시됩니다. 받은 파일이 실제로 배포된 파일인지 확인하려면:
+
+```bash
+shasum -a 256 ~/Downloads/SDOCX_Converter.dmg
+```
+
+출력값을 해당 버전 릴리즈 노트 하단의 SHA-256과 비교하세요. 또한 앱은 업데이트를 내려받을 때 GitHub Releases API가 알려준 digest와 대조하고, 교체할 번들의 식별자와 코드 서명까지 확인한 뒤 설치합니다.
 
 ---
 
