@@ -12,7 +12,7 @@
 - **Local Workspace**: `~/Projects/sdocx-converter/sdocx-converter-macos` (symlinked from `~/Projects/sdocx-converter-macos`)
 - **GitHub Repository**: [FizzyHedgehog/sdocx-converter-macos](https://github.com/FizzyHedgehog/sdocx-converter-macos)
 - **Default Branch**: `main`
-- **Release Status**: `v1.2.1` (Stable Public / Latest, update integrity verification), `v1.2.0` (text-capable engine)
+- **Release Status**: `v1.2.2` (Stable Public / Latest, verified updates + path-free engine build), `v1.2.1`, `v1.2.0`
 - **Bundle Identifier**: `com.fizzyhedgehog.sdocx-converter`
 - **Git Author**: `FizzyHedgehog <fizzyhedgehog@users.noreply.github.com>`
 - **GitHub Personal Access Token**: Stored securely in `~/.config/github_token.txt` (Never commit tokens to git!)
@@ -140,4 +140,5 @@
 - The updater helper script validates the replacement bundle before touching the installed app: `CFBundleIdentifier` must equal `com.fizzyhedgehog.sdocx-converter` and `codesign --verify` must succeed. Use non-strict verification, because `dmgbuild` adds `com.apple.FinderInfo` to the app and that makes `--strict` fail on an otherwise valid bundle. If validation fails, the current installation is left in place and relaunched.
 - Every release note publishes the DMG SHA-256 so users can check a download manually with `shasum -a 256`.
 - Residual gap by design: the update that installs the first verifying build is performed by the previous, unverified updater. Protection applies from that build onward.
+- **Engine builds must be path-anonymous**: compile with `RUSTFLAGS="--remap-path-prefix=$HOME=/build"`. Rust bakes source paths into panic metadata, and the default build leaks the builder's home directory (509 strings across 407 paths). Verify with `strings -a sdocx2pdf-macOS-arm64 | grep -c '/Users/'` returning 0 before committing a new engine binary.
 

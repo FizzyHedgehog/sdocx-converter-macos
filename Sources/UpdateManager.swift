@@ -35,7 +35,7 @@ final class UpdateManager: NSObject, ObservableObject, URLSessionDownloadDelegat
     }
 
     var currentVersion: String {
-        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.2.1"
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.2.2"
     }
 
     func checkForUpdates(silent: Bool = false, includePrereleases: Bool = false, simulateTest: Bool = false) {
